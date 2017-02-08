@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>Новый инцидент</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<head>
+<link href="style.css" rel="stylesheet">
+</head>
+	<body>
+	<div id="logo_img"><img src="лиса с твитера.jpeg" alt="Лиса" class="logo"></div>
+	<h1>Система управления инцидентами</h1>
+	<br></br>
+	</body>
+	<table border=1px width=100%>
+		<thead>
+			<tr class="tr_head">
+				<th colspan="2">Создание инцидента №</th>
+			</tr>
+		<thead>
+		<tbody>
+			<tr>
+				<td class="tr_main">Уровень инцидента</td>
+				<td>
+				<select>
+					<option>А5-Доработка без влияния на производство</option>
+					<option>А4-Аварии оборудования с потенциальным влиянием на производство</option>
+					<option>А3-Аварии оборудования с возможностью резерва</option>
+					<option>А2-Аварии важного оборудования</option>
+					<option>А1-Аварии особо важного оборудования</option>
+				</select>
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Текущий статус</td>
+				<td>
+				<select>
+					<option>1.Назначена</option>
+					<option>2.В работе</option>
+					<option>3.Ожидается разрешение</option>
+					<option>3.1.Ожидается поставка</option>
+					<option>4.Завершено</option>
+					<option>4.1.Завершено.Инцидент не подтвержден</option>
+					<option>4.2.Завершено.Временное решение</option>
+					<option>5.Закрыто</option>
+				</select>
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Краткое описание</td>
+				<td>
+				<textarea name="description" width="100%">
+				</textarea>
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Время начала простоя</td>
+				<td>
+				<input type="month" name="calendar">
+				</td>
+			</tr>
+			
+
+		</tbody>
+			
