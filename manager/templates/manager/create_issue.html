@@ -1,12 +1,13 @@
+{% load staticfiles %}
 <html>
 <head>
 <title>Новый инцидент</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <head>
-<link href="style.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 	<body>
-	<div id="logo_img"><img src="лиса с твитера.jpeg" alt="Лиса" class="logo"></div>
+	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
 	<h1>Система управления инцидентами</h1>
 	<br></br>
 	</body>

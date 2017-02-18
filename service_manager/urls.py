@@ -17,11 +17,11 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from login import views
 from manager import views
-
+    
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/', include('login.urls')),
-    url(r'^$', include('manager.urls')),
+    url(r'^index/', include('manager.urls')),
 ]
 
