@@ -14,9 +14,9 @@ h1
 	}
 textarea
 	{
-		width: 50%;
+		width: 100%;
 		font-size: 14px;
-		height: 150px;
+		height: 100px;
 	}
 
 
@@ -29,7 +29,7 @@ textarea
 .tr_main {
 		background-color:#517fa4;
 		color:#fff;
-		width: 50%;
+		width: 30%;
 		text-align: center;
 		vertical-align: center;
 
@@ -39,6 +39,14 @@ textarea
 	{
 		background-color:#fff;
 	}
+.autorised
+	{
+		background-color:#a8cdf5;
+		border-color:black;
+		border-style: solid;
+		border-width: 1px; 
+	}
+		
 
 tr:hover {
 		background-color:#a8cdf5;

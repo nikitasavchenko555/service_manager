@@ -1,0 +1,142 @@
+/*background:#fff
+#d8dfea --вариант 1 - цвет фона
+#c0deed --вариант 2*/
+body
+	{
+		background-color:#d8dfea;
+	}
+h1
+	{
+		font-family: 'Times New Roman';
+		font-weight: bold;
+		display: inline;
+		
+	}
+textarea
+	{
+		width: 100%;
+		font-size: 14px;
+		height: 100px;
+	}
+
+
+.tr_head {
+		background-color:#517fa4;
+		color:#fff;
+ 
+	}
+
+.tr_main {
+		background-color:#517fa4;
+		color:#fff;
+		width: 30%;
+		text-align: center;
+		vertical-align: center;
+
+	}
+
+.tr_body
+	{
+		background-color:#fff;
+	}
+.autorised
+	{
+		background-color:#a8cdf5;
+		border-color:black;
+		border-style: solid;
+		border-width: 1px; 
+	}
+		
+
+tr:hover {
+		background-color:#a8cdf5;
+	}
+
+#logo_img
+	{
+		display: inline;
+	}
+.logo
+	{
+		height: 60px;
+		border-radius: 100px;
+		display: inline;
+	}
+
+		
+#navbar
+	 {
+        height: 50px;
+        background-color:  #517fa4;  /*фон панели навигации*/
+        padding-left: 15px;
+        min-width: 470px;
+	text-align: center;
+      }
+
+#navbar 
+ul{
+        display: none;
+        background-color: #4682B4;
+        position: absolute;
+        top: 100%;
+	
+      }
+#navbar 
+li:hover ul { display: block;
+	 }
+#navbar, #navbar 
+ul{
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      }
+
+#navbar 
+li {
+        float: left;
+        position: relative;
+        height: 100%;
+      }
+#navbar 
+li a {
+        display: block;
+	padding: 15px 5px;
+        width: 182px;
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+	
+      }
+#navbar 
+ul 
+li { float: none;
+ }
+#navbar 
+li:hover { 
+		background-color: #4682B4; 
+		
+		
+	}
+#navbar 
+ul 
+li:hover { background-color: #a1b9d3;
+ 	border-color:black;
+	border-style: solid;
+	border-width: 1px;
+				 
+	}
+
+
+.menu {
+	border-right: solid black;
+	border-width: 1px;
+	padding: 15px 5px;
+	width: 180px;
+      }
+
+.exit {
+	
+	padding: 15px 5px;
+	width: 180px;
+      }
+	

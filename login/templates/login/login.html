@@ -1,0 +1,41 @@
+{% load staticfiles %}
+<html>
+<head>
+<title>Авторизация</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<head>
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+	<body>
+	<div class="form">
+	<h1>Вас приветствует Система Управления Инцидентами</h1>
+	<h2>Для входа в систему введите учётные данные:</h2>
+	<form action="/login/" method="POST">
+		{% csrf_token %}	
+		<table>
+		<tr>
+			<td class="table">
+			<label>Имя пользователя</label>
+			</td>
+			<td> 
+                	{{ form.username }}
+			</td>
+		</tr>
+		<tr>
+			<td class="table">
+			<label>Пароль</label>
+			</td>
+			<td> 
+                	{{ form.password }}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<input border="2px"  type="submit" value="Войти"/>
+			</td>
+		</tr>
+		</table>
+        </form>
+	</div>	
+	</body>
+</html>
