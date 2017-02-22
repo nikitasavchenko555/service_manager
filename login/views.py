@@ -24,9 +24,7 @@ def log_in(request):
     return render(request, 'login/login.html', {'form': form})
 
 
-'''def login(request):
-    form = LoginForm()
-    return render_to_response('login/login.html', {'form': form})'''
+
 
 	
     
