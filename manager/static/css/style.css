@@ -12,6 +12,22 @@ h1
 		display: inline;
 		
 	}
+
+#equipment_1
+	{
+		width: 25%;
+	}
+#equipment_2
+	{
+		width: 20%;
+	}
+#equipment_3
+	{
+		width: 10%;
+	}
+
+
+		
 textarea
 	{
 		width: 100%;

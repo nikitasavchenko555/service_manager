@@ -59,14 +59,16 @@
 		</thead>
 		<tbody class="tr_body">
 <!--заполнение использовано для тестирования-->
+			{% for issue in issues %}
 			<tr>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
+				<td>{{ issue.number_issue }} </td>
+				<td>{{ issue.level_issue }}</td>
+				<td>{{ issue.current_status }}</td>
+				<td>{{ issue.brief_description }}</td>
+				<td>{{ issue.creator }}</td>
+				<td>{{ issue.coordinator }}</td>
 			</tr>
+			{% endfor %}
 			<tr>
 				<td>test</td>
 				<td>test</td>

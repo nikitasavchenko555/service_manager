@@ -10,7 +10,8 @@
 	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
 	<h1>Система управления инцидентами</h1>
 	<br></br>
-	</body>
+	<form action="/login/" method="POST">
+		{% csrf_token %}	
 	<table border=1px width=100%>
 		<thead>
 			<tr class="tr_head">
@@ -22,11 +23,13 @@
 				<td class="tr_main">Уровень инцидента</td>
 				<td>
 				<select>
-					<option>А5-Доработка без влияния на производство</option>
-					<option>А4-Аварии оборудования с потенциальным влиянием на производство</option>
+				{# {% for levels in level_issue %} #}
+					<option>{{ form.level_issue }}</option>
+					<!--<option>А4-Аварии оборудования с потенциальным влиянием на производство</option>
 					<option>А3-Аварии оборудования с возможностью резерва</option>
 					<option>А2-Аварии важного оборудования</option>
-					<option>А1-Аварии особо важного оборудования</option>
+					<option>А1-Аварии особо важного оборудования</option>-->
+				{# {% endfor %} #}
 				</select>
 				</td>
 			</tr>
@@ -84,7 +87,16 @@
 			<tr>
 				<td class="tr_main">Оборудование</td>
 				<td>
-				<select>
+                                Тип оборудования
+				<select id="equipment_1">
+				<!--будет заполняться из НСИ-->
+				</select>
+                                Модель
+                                <select id="equipment_2">
+				<!--будет заполняться из НСИ-->
+				</select>
+                                №
+                                <select id="equipment_3">
 				<!--будет заполняться из НСИ-->
 				</select>
 				</td>
@@ -167,4 +179,7 @@
 			
 
 		</tbody>
+	</form>
+</body>
+<html>
 			
