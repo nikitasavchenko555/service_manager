@@ -15,44 +15,26 @@
 	<table border=1px width=100%>
 		<thead>
 			<tr class="tr_head">
-				<th colspan="2">Создание инцидента №</th>
+				<th colspan="2">Создание инцидента № {{ issues.number_issue|add:"1" }}</th>
 			</tr>
 		<thead>
 		<tbody>
 			<tr>
 				<td class="tr_main">Уровень инцидента</td>
 				<td>
-				<select>
-				{# {% for levels in level_issue %} #}
-					<option>{{ form.level_issue }}</option>
-					<!--<option>А4-Аварии оборудования с потенциальным влиянием на производство</option>
-					<option>А3-Аварии оборудования с возможностью резерва</option>
-					<option>А2-Аварии важного оборудования</option>
-					<option>А1-Аварии особо важного оборудования</option>-->
-				{# {% endfor %} #}
-				</select>
+				 {{ form.level_issue }}
 				</td>
 			</tr>
 			<tr>
 				<td class="tr_main">Текущий статус</td>
 				<td>
-				<select>
-					<option>1.Назначена</option>
-					<option>2.В работе</option>
-					<option>3.Ожидается разрешение</option>
-					<option>3.1.Ожидается поставка</option>
-					<option>4.Завершено</option>
-					<option>4.1.Завершено.Инцидент не подтвержден</option>
-					<option>4.2.Завершено.Временное решение</option>
-					<option>5.Закрыто</option>
-				</select>
+				 {{ form.current_status }}
 				</td>
 			</tr>
 			<tr>
 				<td class="tr_main">Краткое описание</td>
 				<td>
-				<textarea name="description" width="100%">
-				</textarea>
+				 {{ form.brief_description }}
 				</td>
 			</tr>
 			<tr>
@@ -71,95 +53,67 @@
 			<tr>
 				<td class="tr_main">Подразделение</td>
 				<td>
-				<select>
-					<!--будет заполняться из НСИ-->
-					<option>Цех №1</option>
-					<option>Цех №2</option>
-					<option>Цех №3</option>
-					<option>Цех №4</option>
-					<option>Цех №5</option>
-					<option>Цех №6</option>
-					<option>Цех №7</option>
-					<option>Цех №8</option>
-				</select>
+				{{ form.workspace }}
 				</td>
 			</tr>
 			<tr>
-				<td class="tr_main">Оборудование</td>
+				<td class="tr_main">Тип оборудования</td>
 				<td>
-                                Тип оборудования
-				<select id="equipment_1">
-				<!--будет заполняться из НСИ-->
-				</select>
-                                Модель
-                                <select id="equipment_2">
-				<!--будет заполняться из НСИ-->
-				</select>
-                                №
-                                <select id="equipment_3">
-				<!--будет заполняться из НСИ-->
-				</select>
+				{{ form.equipment_name }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Модель</td>
+                                <td>
+                                {{ form.equipment_model }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Инвентарный №</td>
+ 				<td>                            
+                                {{ form.equipment_inventory }}
 				</td>
 			</tr>
 			<tr>
 				<td class="tr_main">Инициатор</td>
 				<td>
-				<select>
-				<!--будет заполняться из НСИ в зависимости от рабочей группы-->
-				</select>
+				{{ form.creator }}
 				</td>
 			</tr>
 			<tr>
 				<td class="tr_main">Рабочая группа</td>
 				<td>
-				<select>
-					<!--будет заполняться из НСИ-->
-					<option>Служба Главного Механика.Электрики</option>
-					<option>Служба Главного Механика.Электроники</option>
-					<option>Служба Главного Механика.Механики</option>
-					<option>Служба Главного Энергетика.Электрики</option>
-					<option>Служба Главного Энергетика.Теплосеть</option>
-					<option>Служба Главного Энергетика.Сантехники</option>
-				</select>
+				{{  form.groups_of_work }}
 				</td>
 			</tr>
 			<tr>
 				<td class="tr_main">Координатор</td>
 				<td>
-				<select>
-				<!--будет заполняться из НСИ в зависимости от рабочей группы-->
-				</select>
+				{{ form.coordinator }}
 				</td>
 			</tr>
 			<tr>
 				<td class="tr_main">Исполнитель</td>
 				<td>
-				<select>
-				<!--будет заполняться из НСИ в зависимости от рабочей группы-->
-				</select>
+				{{ form.executor }}
 				</td>
 			</tr>
 			<tr>
 				<td class="tr_main">Ход работ</td>
 				<td>
-				<textarea name="description" width="100%">
-				</textarea>
+				{{ form.progress }}
 				</td>
 			</tr>
 			<tr>
 				<td class="tr_main">Причина</td>
 				<td>
-				<select>
-					<!--будет заполняться из НСИ в зависимости от рабочей группы-->
-				</select>
+				{{ form.group_of_reason }}
 				</td>
 			</tr>
 			<tr>
 				<td class="tr_main">Способ устранения</td>
 				<td>
-				<select>
-					<!--будет заполняться из НСИ в зависимости от рабочей группы-->
-				</select>
+				{{ form.solution }}
 				</td>
 			</tr>
 			<tr>
@@ -174,10 +128,12 @@
 				<input type="month" name="calendar">
 				</td>
 			</tr>
+			<tr>
+			<td colspan="2">
+			<input border="2px"  type="submit" value="Сохранить"/>
+			</td>
+			</tr>
 			
-			
-			
-
 		</tbody>
 	</form>
 </body>

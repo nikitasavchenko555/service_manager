@@ -1,7 +1,8 @@
 from django.db import models
+from django import forms
 from django.utils import timezone
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django.forms import ModelForm, inlineformset_factory
 #надо исправить возможность задавать null в поле level_issue
 
 def uknown_user():
@@ -145,8 +146,12 @@ class issues(models.Model):
 class IssuesForm(ModelForm):
      class Meta:
          model = issues
-         fields = [ 'number_issue', 'level_issue', 'current_status', 'brief_description', 'start_downtime', 'start_issue',
- 'workspace', 'equipment_name', 'equipment_model', 'equipment_inventory', 'creator', 'groups_of_work', 'coordinator', 'executor', 'progress', 'group_of_reason', 'solution', 'comment' ]
+         fields = ['number_issue', 'level_issue', 'current_status', 'brief_description', 'start_downtime', 'start_issue',
+ 'workspace', 'equipment_name', 'equipment_model', 'equipment_inventory', 'creator', 'groups_of_work', 'coordinator', 'executor', 'progress', 'group_of_reason', 'solution', 'comment']
+         widgets = {'progress': forms.Textarea, 'brief_description': forms.Textarea }
+
+IssuesFormSet = inlineformset_factory(equipment, issues, fk_name=('equipment_name') , form=IssuesForm)
+         
     
     
     
