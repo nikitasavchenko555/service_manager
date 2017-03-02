@@ -1,6 +1,7 @@
 from django.db import models
 from django import forms
 from django.utils import timezone
+from datetime import datetime 
 from django.contrib.auth.models import User
 from django.forms import ModelForm, inlineformset_factory
 #надо исправить возможность задавать null в поле level_issue
@@ -143,14 +144,14 @@ class issues(models.Model):
 
 
 
-class IssuesForm(ModelForm):
+'''class IssuesForm(ModelForm):
      class Meta:
          model = issues
          fields = ['number_issue', 'level_issue', 'current_status', 'brief_description', 'start_downtime', 'start_issue',
  'workspace', 'equipment_name', 'equipment_model', 'equipment_inventory', 'creator', 'groups_of_work', 'coordinator', 'executor', 'progress', 'group_of_reason', 'solution', 'comment']
-         widgets = {'progress': forms.Textarea, 'brief_description': forms.Textarea }
+         widgets = {'progress': forms.Textarea, 'brief_description': forms.Textarea,'start_downtime':forms.SplitDateTimeWidget}
 
-IssuesFormSet = inlineformset_factory(equipment, issues, fk_name=('equipment_name') , form=IssuesForm)
+IssuesFormSet = inlineformset_factory(equipment, issues, fk_name=('equipment_name'), form=IssuesForm)'''
          
     
     

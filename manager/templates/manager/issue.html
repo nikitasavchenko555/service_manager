@@ -1,0 +1,142 @@
+{% load staticfiles %}
+<html>
+<head>
+<title>Просмотр инцидента</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<head>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+	<body>
+	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
+	<h1>Система управления инцидентами</h1>
+	<br></br>
+	
+	<form action="/login/" method="POST">
+		{% csrf_token %}	
+	<table border=1px width=100%>
+		<thead>
+			<tr class="tr_head">
+				<th colspan="2"><a class="back"  href="{% url 'index' %}">На главную</a>Просмотр инцидента № {{ issue.number_issue }}</th>
+			</tr>
+		<thead>
+		<tbody>
+			<tr>
+				<td class="tr_main">Уровень инцидента</td>
+				<td>
+				 {{ issue.level_issue }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Текущий статус</td>
+				<td>
+				 {{ issue.current_status }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Краткое описание</td>
+				<td>
+				 {{ issue.brief_description }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Время начала простоя</td>
+				<td>
+				{{ issue.start_downtime }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Время создания инцидента</td>
+				<td>
+				{{ issue.start_issue }}
+				</td>
+			</tr>
+			
+			<tr>
+				<td class="tr_main">Подразделение</td>
+				<td>
+				{{ issue.workspace }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Тип оборудования</td>
+				<td>
+				{{ issue.equipment_name }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Модель</td>
+                                <td>
+                                {{ issue.equipment_model }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Инвентарный №</td>
+ 				<td>                            
+                                {{ issue.equipment_inventory }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Инициатор</td>
+				<td>
+				{{ issue.creator }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Рабочая группа</td>
+				<td>
+				{{  issue.groups_of_work }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Координатор</td>
+				<td>
+				{{ issue.coordinator }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Исполнитель</td>
+				<td>
+				{{ issue.executor }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Ход работ</td>
+				<td>
+				{{ issue.progress }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Причина</td>
+				<td>
+				{{ issue.group_of_reason }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Способ устранения</td>
+				<td>
+				{{ issue.solution }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Время окончания простоя</td>
+				<td>
+				{{ issue. }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main">Время закрытия</td>
+				<td>
+				<input type="month" name="calendar">
+				</td>
+			</tr>
+			<!--кнопку показывать только при редактировании-->
+			<tr class="tr_main">
+			<td colspan="2">
+			<input border="2px"  type="submit" value="Сохранить"/>
+			</td>
+			</tr>
+			
+		</tbody>
+	</form>
+</body>
+<html>

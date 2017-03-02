@@ -13,27 +13,29 @@ h1
 		
 	}
 
-#equipment_1
-	{
-		width: 25%;
-	}
-#equipment_2
-	{
-		width: 20%;
-	}
-#equipment_3
-	{
-		width: 10%;
-	}
-
-
-		
 textarea
 	{
 		width: 100%;
 		font-size: 14px;
 		height: 100px;
 	}
+
+.visit:hover
+	{
+  		position: relative;
+  		top: 2px;
+  		left: 2px;
+		width:100%;
+	}
+
+.back	
+	{
+		position: absolute;
+		left: 2%;
+		color:#fff;
+		
+	}
+		
 
 
 .tr_head {
@@ -68,14 +70,31 @@ tr:hover {
 		background-color:#a8cdf5;
 	}
 
-#logo_img
+input[type=submit]
 	{
-		display: inline;
+		
+		border: 2px solid;
+		border-style: ridge;
+		height:40px;
+		text-align: center;
 	}
+
+
 .logo
 	{
 		height: 60px;
 		border-radius: 100px;
+		display: inline;
+		
+	}
+
+
+
+
+
+#logo_img
+
+	{
 		display: inline;
 	}
 
@@ -97,9 +116,12 @@ ul{
         top: 100%;
 	
       }
+
 #navbar 
-li:hover ul { display: block;
+li:hover ul 
+	{ display: block;
 	 }
+
 #navbar, #navbar 
 ul{
         margin: 0;

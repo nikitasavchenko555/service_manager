@@ -60,8 +60,9 @@
 		<tbody class="tr_body">
 <!--заполнение использовано для тестирования-->
 			{% for issue in issues %}
-			<tr>
-				<td>{{ issue.number_issue }} </td>
+			<!--<a href="{% url 'view_issue' number=issue.number_issue %}" target="_blank" class="visit">-->
+			<tr onclick="openWin('{% url 'view_issue' number=issue.number_issue %}')">
+				<td>{{ issue.number_issue }}</td>
 				<td>{{ issue.level_issue }}</td>
 				<td>{{ issue.current_status }}</td>
 				<td>{{ issue.brief_description }}</td>
@@ -70,5 +71,6 @@
 			</tr>
 			{% endfor %}
 		<tbody>
+	<script src="{% static 'manager/link.js' %}"></script>
 	</body>
 </html>
