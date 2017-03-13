@@ -15,9 +15,9 @@ def log_in(request):
                 if user.is_active:
                      login(request, user)
                      return HttpResponseRedirect('/index')
-                else:
-                     print("Пользователя не существует")
             else:
+                     print("Пользователя не существует")
+        else:
                  print("Имя или пароль неверны")
     else:
         form = LoginForm()

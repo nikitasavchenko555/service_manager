@@ -4,6 +4,7 @@ from django.utils import timezone
 from datetime import datetime 
 from django.contrib.auth.models import User
 from django.forms import ModelForm, inlineformset_factory
+from django.utils.safestring import mark_safe
 #надо исправить возможность задавать null в поле level_issue
 
 def uknown_user():
@@ -121,8 +122,12 @@ class issues(models.Model):
     level_issue = models.ForeignKey(level_issue)
     current_status = models.ForeignKey(status_issue)
     brief_description = models.CharField(max_length=200)
-    start_downtime = models.DateTimeField()
-    start_issue = models.DateTimeField()
+    #start_downtime = models.DateTimeField()
+    start_down_date = models.DateField()
+    start_down_time = models.TimeField()
+    start_issue_date = models.DateField()
+    start_issue_time = models.TimeField()
+    #start_issue = models.DateTimeField()
     workspace = models.ForeignKey(workspace)
     equipment_name = models.ForeignKey(equipment, verbose_name="Тип", related_name="equipment_name")
     equipment_model = models.ForeignKey(equipment, verbose_name="Модель", related_name="equipment_model")
@@ -137,6 +142,10 @@ class issues(models.Model):
     number_history = models.IntegerField()
     comment = models.CharField(max_length=300, blank=True)
     change_date = models.DateTimeField(default = timezone.now)
+    close_down_date = models.DateField(blank=True, null=True)
+    close_down_time = models.TimeField(blank=True, null=True)
+    close_issue_date = models.DateField(blank=True, null=True)
+    close_issue_time = models.TimeField(blank=True, null=True)
     user_edit = models.ForeignKey('auth.User', default=uknown_user)
     class Meta:
         verbose_name = 'Инцидент'
@@ -144,21 +153,7 @@ class issues(models.Model):
 
 
 
-'''class IssuesForm(ModelForm):
-     class Meta:
-         model = issues
-         fields = ['number_issue', 'level_issue', 'current_status', 'brief_description', 'start_downtime', 'start_issue',
- 'workspace', 'equipment_name', 'equipment_model', 'equipment_inventory', 'creator', 'groups_of_work', 'coordinator', 'executor', 'progress', 'group_of_reason', 'solution', 'comment']
-         widgets = {'progress': forms.Textarea, 'brief_description': forms.Textarea,'start_downtime':forms.SplitDateTimeWidget}
 
-IssuesFormSet = inlineformset_factory(equipment, issues, fk_name=('equipment_name'), form=IssuesForm)'''
-         
-    
-    
-    
-    
-    
-    
 
 
     

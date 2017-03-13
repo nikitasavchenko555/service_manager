@@ -1,0 +1,48 @@
+<!DOCTYPE html> 
+{% extends "manager/create_issue.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load admin_static %}
+{% block extra_header %}
+
+        <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+        <link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css" />
+	<script type="text/javascript" src="/admin/jsi18n/"></script>
+	<script type="text/javascript" src="/static/admin/js/core.js"></script>
+	<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+	<script type="text/javascript" src="/static/admin/js/actions.js"></script>
+	<script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+	<script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+	<script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+        <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+        <script type="text/javascript" src="{% static 'admin/js/inlines.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+<tr class="form-group">
+        <td class="form-group">
+            {{ form.start_downtime.label_tag }}
+            {{ form.start_downtime  }}
+            {{ form.start_downtime.errors }}
+        </td>
+        <td class="form-group">
+            {{ form.time.label_tag }}
+            {{ form.time  }}
+            {{ form.time.errors }}
+        </td>  
+</tr>
+
+{% endblock %}
+{% block footer_js %}
+<script>
+    var django = django || {};
+    django.jQuery = $;
+</script>
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+{{ form.media }}
+{% endblock %}
+

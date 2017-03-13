@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import *
 from django.http import Http404
-from .forms import IssuesForm
+from .forms import IssuesForm, EventForm
+from django.views.i18n import *
+
 
 
 def index(request):
-    issue = issues.objects.order_by("change_date")
+    issue = issues.objects.order_by("-change_date")
     return render(request, 'manager/index.html', {'issues': issue})
     
 def create_issue(request):
@@ -19,14 +21,14 @@ def create_issue(request):
                    issues.change_date = timezone.now()
                    issues.save()
                    return redirect('/index/')
-            #else:
-                #return  HttpResponse("Форма невалидна")
+            else:
+                return  HttpResponse("Форма невалидна")
         else:
-           #number = issues.objects.order_by("change_date").last() 
+            #number = issues.objects.order_by("-change_date").last() 
             form = IssuesForm()
         return render(request, 'manager/create_issue.html', {'form': form })
     #except:
-       # return  HttpResponse("У нас проблема")
+        #return  HttpResponse("У нас проблема")
 
 
 def view_issue(request, number):
@@ -35,6 +37,11 @@ def view_issue(request, number):
     except:
         raise Http404
     return render(request, 'manager/issue.html', {'issue': issue })
+
+
+
+
+        
    
 
 

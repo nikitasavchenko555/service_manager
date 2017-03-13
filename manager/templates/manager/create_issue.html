@@ -4,7 +4,20 @@
 <title>Новый инцидент</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <head>
+<link rel="stylesheet" href="{% static 'css/time.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+	<script type="text/javascript" src="/static/admin/js/core.js"></script>
+	<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+	<script type="text/javascript" src="/static/admin/js/actions.js"></script>
+	<script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+	<script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+	<script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+        <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+        <script type="text/javascript" src="{% static 'admin/js/inlines.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
 </head>
 	<body>
 	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
@@ -44,15 +57,27 @@
 				</td>
 			</tr>
 			<tr>
+				<td class="tr_main"><label>Дата начала простоя</label></td>
+				<td class="form-group">
+				    {{ form.start_down_date  }}
+				</td> 
+			</tr>
+			<tr>
 				<td class="tr_main"><label>Время начала простоя</label></td>
-				<td>
-				 {{ form.start_downtime }}
-				</td>
+				<td class="form-group">
+				    {{ form.start_down_time  }}
+				</td> 
+			</tr>
+			<tr>
+				<td class="tr_main"><label>Дата создания инцидента</label></td>
+				<td class="form-group">
+				    {{ form.start_issue_date  }}
+				</td> 
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Время создания инцидента</label></td>
-				<td>
-				 {{ form.start_issue }}
+				<td class="form-group">
+				    {{ form.start_issue_time  }}
 				</td>
 			</tr>
 			
@@ -122,18 +147,30 @@
 				{{ form.solution }}
 				</td>
 			</tr>
-			<!--<tr>
-				<td class="tr_main"><label>Время окончания простоя</label></td>
-				<td>
-				<input type="month" name="calendar">
+			<tr>
+				<td class="tr_main"><label>Дата окончания простоя</label></td>
+				<td class="form-group">
+				{{ form.close_down_date }}
 				</td>
 			</tr>
 			<tr>
-				<td class="tr_main"><label>Время закрытия</label></td>
-				<td>
-				<input type="datetime-local" name="calendar" >
+				<td class="tr_main"><label>Время окончания простоя</label></td>
+				<td class="form-group">
+				{{ form.close_down_time  }}
 				</td>
-			</tr>-->
+			</tr>
+			<tr>
+				<td class="tr_main"><label>Дата закрытия инцидента</label></td>
+				<td class="form-group">
+				{{ form.close_down_date }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main"><label>Время закрытия инцидента</label></td>
+				<td class="form-group">
+				{{ form.close_issue_time  }}
+				</td>
+			</tr>
 			<tr class="tr_main">
 			<td colspan="2">
 			<input border="2px"  type="submit" value="Сохранить"/>
@@ -141,6 +178,15 @@
 			</tr>
 		</tbody>
 	</table>
+	
+{% block footer_js %}
+<script>
+    var django = django || {};
+    django.jQuery = $;
+</script>
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+{{ form.media }}
+{% endblock %}
 	</form>
 </body>
 <html>
