@@ -1,16 +1,18 @@
+{% load staticfiles %}
 <html>
 <head>
-<title>Главная страница</title>
+<title>Мои инциденты</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <head>
-<link href="style.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 	<body>
-	<div id="logo_img"><img src="лиса с твитера.jpeg" alt="Лиса" class="logo"></div>
+	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
 	<h1>Система управления инцидентами</h1>
 	<br></br>
+	{% block content %}{% endblock %}
 	<ul id="navbar">
-  	<li><a class="menu" href="create_record.html" target="_blank">Создать инцидент</a></li>
+  	<li><a class="menu" href="create_issue" target="_blank">Создать инцидент</a></li>
   	<li><a class="menu" href="#">Список инцидентов</a>
 	<ul>
         <li><a href="#">Мои инциденты</a></li>
@@ -40,12 +42,15 @@
 	</li>
 	<li><a class="menu" href="#">Справка</a>	
 	</li>
-	<li><a class="exit"  href="#">Выход</a></li>
+	<li><a class="exit"  href="/login/logout/">Выход</a></li>
 	</ul>
 	<br>
 	<br>
 	<table border=1px width=100%>
 		<thead>
+                        <tr class="tr_head">
+			<td colspan="6" class="tr_main"><a class="back"  href="{% url 'index' %}">На главную</a>Мои инциденты</td>
+			</tr>
 			<tr class="tr_head">
 				<th>№ инцидента</th>
 				<th>Уровень</th>
@@ -57,46 +62,18 @@
 		</thead>
 		<tbody class="tr_body">
 <!--заполнение использовано для тестирования-->
-			<tr>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
+			{% for issue in issue_user %}
+			<!--<a href="{% url 'view_issue' number=issue.number_issue %}" target="_blank" class="visit">-->
+			<tr class="tr_click" onclick="openWin('{% url 'view_issue' number=issue.number_issue %}')">
+				<td>{{ issue.number_issue }}</td>
+				<td>{{ issue.level_issue }}</td>
+				<td>{{ issue.current_status }}</td>
+				<td>{{ issue.brief_description }}</td>
+				<td>{{ issue.creator }}</td>
+				<td>{{ issue.coordinator }}</td>
 			</tr>
-			<tr>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-			</tr>
-			<tr>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-			</tr>
-			<tr>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-			</tr>
-			<tr>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-				<td>test</td>
-			</tr>
+			{% endfor %}
 		<tbody>
+	<script src="{% static 'manager/link.js' %}"></script>
 	</body>
 </html>

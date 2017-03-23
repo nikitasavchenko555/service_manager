@@ -5,11 +5,47 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.forms import ModelForm, inlineformset_factory
 from django.utils.safestring import mark_safe
-#надо исправить возможность задавать null в поле level_issue
+from login.models import *
 
 def uknown_user():
     id = 777
     return id
+
+class equipment_manager(models.Manager):
+     def get_name(self):
+         from django.db import connection
+         cursor = connection.cursor()
+         cursor.execute("""
+            SELECT e.name
+            FROM manager_equipment e""")
+         result_list = [row for row in cursor.fetchall()]
+
+         def __str__(self):
+
+              return self.name 
+        
+         return result_list
+
+     def get_model(self):
+         from django.db import connection
+         cursor = connection.cursor()
+         cursor.execute("""
+            SELECT e.model
+            FROM manager_equipment e""")
+         model_list = {row: row for row in cursor.fetchall()}
+        
+         return model_list
+
+     def get_inventory(self):
+         from django.db import connection
+         cursor = connection.cursor()
+         cursor.execute("""
+            SELECT e.inventory_number
+            FROM manager_equipment e""")
+         inventory_list = [row for row in cursor.fetchall()]
+        
+         return inventory_list
+         
 
 
 class groups_of_reason(models.Model): #группы причин
@@ -69,17 +105,17 @@ class status_issue(models.Model): #статус инцидентов
 
 class State(models.Model):#словарь статусов сотрудников
     id_state = models.PositiveSmallIntegerField()
-    description_state = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
     change_date = models.DateTimeField(default = timezone.now)
     user_edit = models.ForeignKey('auth.User', default=uknown_user)
     class Meta:
         verbose_name = 'Словарь статусов сотрудников'
         verbose_name_plural = 'Словари статусов сотрудников'
     def __str__(self):
-        return self.description_state
+        return self.description
 
 
-class workers(models.Model): #список сотрудников
+'''class workers(models.Model): #список сотрудников
     position = models.CharField(max_length=200)
     fio = models.CharField(max_length=200)
     id_state = models.ForeignKey(State)
@@ -89,7 +125,7 @@ class workers(models.Model): #список сотрудников
         verbose_name = 'Список сотрудников'
         verbose_name_plural = 'Списки сотрудников'
     def __str__(self):
-        return self.fio
+        return self.fio'''
 
    
 
@@ -107,35 +143,47 @@ class workspace(models.Model): #список подразделений
 class equipment(models.Model): #список оборудования
     workspace = models.ForeignKey(workspace)
     name = models.CharField(max_length=300)
-    model = models.CharField(max_length=20)
+    model = models.CharField(max_length=20, unique=True)
     inventory_number  = models.IntegerField()
     change_date = models.DateTimeField(default = timezone.now)
     user_edit = models.ForeignKey('auth.User', default=uknown_user)
+    objects = equipment_manager()
     class Meta:
         verbose_name = 'Список оборудования'
         verbose_name_plural = 'Списки оборудования'
+
+    
     def __str__(self):
-        return (self.name)
+
+        return self.name
+
+        #return name
+
+    #def __str__(self):
+#надо разобраться с методами
+
+        #return self.model
 
 class issues(models.Model):
+    #class Meta:
+        # делает уникальным направление обмена
+        #unique_together = ("equipment_model", "equipment_inventory")
     number_issue = models.IntegerField(primary_key=True)
     level_issue = models.ForeignKey(level_issue)
     current_status = models.ForeignKey(status_issue)
     brief_description = models.CharField(max_length=200)
-    #start_downtime = models.DateTimeField()
     start_down_date = models.DateField()
     start_down_time = models.TimeField()
     start_issue_date = models.DateField()
     start_issue_time = models.TimeField()
-    #start_issue = models.DateTimeField()
     workspace = models.ForeignKey(workspace)
-    equipment_name = models.ForeignKey(equipment, verbose_name="Тип", related_name="equipment_name")
-    equipment_model = models.ForeignKey(equipment, verbose_name="Модель", related_name="equipment_model")
-    equipment_inventory = models.ForeignKey(equipment, verbose_name="Инвентарный №", related_name="equipment_inventory")
-    creator = models.ForeignKey(workers, verbose_name="Инициатор", related_name="issue_creator")
+    equipment_name = models.ForeignKey(equipment, verbose_name="Тип", related_name='+')
+    equipment_model = models.ForeignKey(equipment, verbose_name="Модель", related_name='+')
+    equipment_inventory = models.ForeignKey(equipment, verbose_name="Инвентарный №", related_name='+')
+    creator = models.ForeignKey('login.UserProfile', verbose_name="Инициатор", related_name="issue_creator")
     groups_of_work = models.ForeignKey(groups_of_work)
-    coordinator = models.ForeignKey(workers, verbose_name="Координатор", related_name="issue_coordinator")
-    executor = models.ForeignKey(workers, verbose_name="Исполнитель", related_name="issue_executor")
+    coordinator = models.ForeignKey('login.UserProfile', verbose_name="Координатор", related_name="issue_coordinator")
+    executor = models.ForeignKey('login.UserProfile', verbose_name="Исполнитель", related_name="issue_executor")
     progress = models.CharField(max_length=1000)
     group_of_reason = models.ForeignKey(groups_of_reason, blank=True)
     solution = models.ForeignKey(solutions, blank=True)
@@ -150,6 +198,9 @@ class issues(models.Model):
     class Meta:
         verbose_name = 'Инцидент'
         verbose_name_plural = 'Инциденты'
+
+
+#IssuesEqupmentFormSet = inlineformset_factory(Issues, equipment)
 
 
 

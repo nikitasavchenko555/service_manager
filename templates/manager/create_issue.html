@@ -7,30 +7,22 @@
 <link rel="stylesheet" href="{% static 'css/time.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <script type="text/javascript" src="/admin/jsi18n/"></script>
-<script type="text/javascript" src="/static/admin/js/core.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
-<!--<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.min.js"></script>-->
-<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
-<script type="text/javascript" src="/static/admin/js/inlines.min.js"></script>
-<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
-<script type="text/javascript" src="/static/admin/js/actions.js"></script>
-<script type="text/javascript" src="/static/admin/js/urlify.js"></script>
-<script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
-<script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
-<script type="text/javascript" src="/static/manager/manager_ajax.js"></script>
-<script type="text/javascript" src="/static/manager/manager_ajax_2.js"></script>
-<script type="text/javascript" src="/static/manager/manager_ajax_3.js"></script>
-<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
-<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+	<script type="text/javascript" src="/static/admin/js/core.js"></script>
+	<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+	<script type="text/javascript" src="/static/admin/js/actions.js"></script>
+	<script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+	<script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+	<script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+        <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+        <script type="text/javascript" src="{% static 'admin/js/inlines.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
 </head>
 	<body>
 	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
 	<h1>Система управления инцидентами</h1>
 	<br></br>
-        {% block content %}
-        {% include "manager/log_user.html" %}
-        {% endblock %}
 	<form  method="POST">
 		{% csrf_token %}	
 	<table border=1px width=100%>
@@ -44,7 +36,6 @@
 				<td class="tr_main"><label>Уровень инцидента</label></td>
 				<td>
 				 {{ form.level_issue }}
-                                
 				</td>
 			</tr>
 			<tr>
@@ -98,13 +89,7 @@
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Тип оборудования</label></td>
-				<td>
-				<select>
-				{% for name in equipment_name %}}
-				<option>{{ name }}</option>
-				{% endfor %}
-				</select>
-				<input id="name" data-catid="{{ name }}" border="2px" type="submit" value="Выбрать"/></td><td id="error-name"></td>
+				<td>{{ form.equipment_name }}</td>
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Модель</label></td>
@@ -187,29 +172,16 @@
 			</tr>
 		</tbody>
 	</table>
+	
 {% block footer_js %}
 <script>
     var django = django || {};
     django.jQuery = $;
 </script>
-<!--<script type="text/javascript" src="/admin/jsi18n/"></script>-->
-
+<script type="text/javascript" src="/admin/jsi18n/"></script>
 {{ form.media }}
 {% endblock %}
-</form>
-<script>
-$(document).ready(function() {
-
-    $("#name").click( function(event) {
-       var catid;
-       catid = $(this).attr("data-catid");
-       $.get('/change_equipment_view/', {name: catid}, function(data){
-       $('#error-name').html(data);
-  
-    });
-});
-});
-</script>
+	</form>
 </body>
 <html>
 			

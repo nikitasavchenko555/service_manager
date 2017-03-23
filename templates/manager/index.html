@@ -6,15 +6,12 @@
 <head>
 <!--<link href="style.css" rel="stylesheet">-->
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
-<script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
 </head>
 	<body>
 	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
 	<h1>Система управления инцидентами</h1>
-	<br></br>
-        {% block content %}
-        {% include "manager/log_user.html" %}
-        {% endblock %}
+	<br>{% block content %}{% endblock %}</br>
+	
 	<ul id="navbar">
   	<li><a class="menu" href="create_issue" target="_blank">Создать инцидент</a></li>
   	<li><a class="menu" href="#">Список инцидентов</a>

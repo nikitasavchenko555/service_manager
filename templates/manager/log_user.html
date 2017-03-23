@@ -1,0 +1,7 @@
+{% extends "index.html" %}
+{% block content %}
+<table class="log_user">
+	<tr><td class="tr_main" >Пользователь:</td><td class="tr_body">{{ user.username }}</td></tr>
+	<tr><td class="tr_main" >Роль:</td><td class="tr_body">{{ current_user.id_state }}</td></tr>
+</table>
+{% endblock %}
