@@ -16,7 +16,7 @@ class equipment_manager(models.Manager):
          from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""
-            SELECT e.name
+            SELECT DISTINCT e.name
             FROM manager_equipment e""")
          result_list = [row for row in cursor.fetchall()]
 
@@ -26,25 +26,39 @@ class equipment_manager(models.Manager):
         
          return result_list
 
-     def get_model(self):
+     def get_model(self, message):
          from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""
             SELECT e.model
-            FROM manager_equipment e""")
-         model_list = {row: row for row in cursor.fetchall()}
+            FROM manager_equipment e 
+            where e.name=%s""", [message])
+         cursor_list = cursor.fetchall()
+         model_list = [ row for row in cursor_list ]
         
          return model_list
 
-     def get_inventory(self):
+     def get_inventory(self, model):
          from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""
             SELECT e.inventory_number
-            FROM manager_equipment e""")
+            FROM manager_equipment e
+            where e.model=%s""", [model])
          inventory_list = [row for row in cursor.fetchall()]
         
          return inventory_list
+     
+     def check_inventory(self, inv):
+         from django.db import connection
+         cursor = connection.cursor()
+         cursor.execute("""
+            SELECT e.inventory_number
+            FROM manager_equipment e
+            where e.inventory_number=%s""", [inv])
+         check_list = [row for row in cursor.fetchall()]
+        
+         return check_list
          
 
 

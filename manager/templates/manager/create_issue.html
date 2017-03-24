@@ -18,11 +18,11 @@
 <script type="text/javascript" src="/static/admin/js/urlify.js"></script>
 <script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
 <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
-<script type="text/javascript" src="/static/manager/manager_ajax.js"></script>
-<script type="text/javascript" src="/static/manager/manager_ajax_2.js"></script>
-<script type="text/javascript" src="/static/manager/manager_ajax_3.js"></script>
 <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
 <script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+<script type="text/javascript" src="/static/manager/model_list.js"></script>
+<script type="text/javascript" src="/static/manager/inventory_list.js"></script>
+<script type="text/javascript" src="/static/manager/sender.js"></script>
 </head>
 	<body>
 	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
@@ -98,21 +98,19 @@
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Тип оборудования</label></td>
-				<td>
-				<select>
-				{% for name in equipment_name %}}
-				<option>{{ name }}</option>
-				{% endfor %}
-				</select>
-				<input id="name" data-catid="{{ name }}" border="2px" type="submit" value="Выбрать"/></td><td id="error-name"></td>
+				<td id="my_select">{{ form.equipment_name }}
+			        </td>
+
+				
+				</td>
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Модель</label></td>
-                                <td>{{ form.equipment_model }}</td>
+                                <td><select id="model"></select></td>
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Инвентарный №</label></td>
- 				<td>{{ form.equipment_inventory }}</td>
+ 				<td><select id="inventory"></select><div id="succes_equipment"></div>{{ cat_id }}</td>
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Инициатор</label></td>
@@ -197,19 +195,6 @@
 {{ form.media }}
 {% endblock %}
 </form>
-<script>
-$(document).ready(function() {
-
-    $("#name").click( function(event) {
-       var catid;
-       catid = $(this).attr("data-catid");
-       $.get('/change_equipment_view/', {name: catid}, function(data){
-       $('#error-name').html(data);
-  
-    });
-});
-});
-</script>
 </body>
 <html>
 			

@@ -1,0 +1,21 @@
+$("#id_sub").html(options);
+        $("#id_sub option:first").attr('selected', 'selected');
+        $("#id_sub").attr('disabled', false);
+      })
+      $("#my_select").attr('selected', 'selected');
+
+
+#этот вариант рабочий!!!
+$("#my_select").click( function(event) {
+       var catid;
+       catid = $("#my_select option:selected").text();
+       alert(catid)
+       $.get('/index/create_issue/', {name: catid}, function(message){
+        alert(typeof(message))
+       for (var i = 0; i < message; i++) {
+ 
+          $('#error-name').html(i);
+        }
+       
+   });
+});

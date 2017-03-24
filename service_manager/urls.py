@@ -22,7 +22,8 @@ from django import *
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/', include('login.urls')),
-    url(r'^index/', include('manager.urls')),
+    #url(r'^index/', include('manager.urls')),
+    url(r'index/', include('manager.urls')),
     #url(r'^admin/jsi18n', django.views.i18n.javascript_catalog, name='jsi18n'),
 ]
 
