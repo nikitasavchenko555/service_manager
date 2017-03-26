@@ -48,8 +48,6 @@ $("#succes_equipment").click( function(event) {
         function(data)
 	{
 	   alert(data);
-	   alert(catid);
-           alert(mode);
 	});
 });
 });
