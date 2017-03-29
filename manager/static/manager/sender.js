@@ -7,7 +7,7 @@ $("#inventory").click( function(event) {
        $('#succes_equipment').html(message)
        });
        });
-$("#succes_equipment").click( function(event) {
+$("#request_equipment").click( function(event) {
        // using jQuery
          function getCookie(name) {
          var cookieValue = null;
@@ -47,9 +47,7 @@ $("#succes_equipment").click( function(event) {
 	},
         function(data)
 	{
-	   alert(data);
-	   alert(catid);
-           alert(mode);
+	   $('#succes_equipment').html(data)
 	});
 });
 });

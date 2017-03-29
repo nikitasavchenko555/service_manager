@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <html>
 <head>
-<title>Мои инциденты</title>
+<title>Инциденты моей группы</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <head>
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -51,7 +51,7 @@
 	<table border=1px width=100%>
 		<thead>
                         <tr class="tr_head">
-			<td colspan="6" class="tr_main"><a class="back"  href="{% url 'index' %}">На главную</a>Мои инциденты</td>
+			<td colspan="6" class="tr_main"><a class="back"  href="{% url 'index' %}">На главную</a>Инциденты моей группы</td>
 			</tr>
 			<tr class="tr_head">
 				<th>№ инцидента</th>
@@ -64,7 +64,7 @@
 		</thead>
 		<tbody class="tr_body">
 <!--заполнение использовано для тестирования-->
-			{% for issue in issue_user %}
+			{% for issue in issues_groups %}
 			<!--<a href="{% url 'view_issue' number=issue.number_issue %}" target="_blank" class="visit">-->
 			<tr class="tr_click" onclick="openWin('{% url 'view_issue' number=issue.number_issue %}')">
 				<td>{{ issue.number_issue }}</td>

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm, inlineformset_factory, ModelChoiceField
-from .models import issues, equipment, equipment_manager, groups_of_reason, solutions
+from .models import issues, equipment, equipment_manager, groups_of_reason, solutions, status_issue
 from django.contrib.admin import widgets
 from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget
 
@@ -25,6 +25,7 @@ class IssuesForm(ModelForm):
          self.fields['close_issue_time'].widget = widgets.AdminTimeWidget()
          self.fields['group_of_reason'].initial = groups_of_reason.objects.get(pk=7)
          self.fields['solution'].initial = solutions.objects.get(pk=7)
+         self.fields['current_status'].initial = status_issue.objects.get(pk=1)
          #self.fields['equipment_name'] = equipment.objects.get_name()#equipment.objects.all().values("name")
          #self.fields['equipment_model'] = equipment.objects.get_model()
          #self.fields['equipment_inventory'].queryset = equipment.objects.all()

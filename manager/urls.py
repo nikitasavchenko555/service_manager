@@ -10,5 +10,7 @@ urlpatterns = [
     url(r'^issue/(?P<number>[0-9]+)/$', views.view_issue, name='view_issue'),
     url(r'^jsi18n/$', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     url(r'^view_issues_user/', views.view_issues_user, name='view_issues_user'),
-    url(r'^log_user/', views.user_data, name='user_data'),    
+    url(r'^log_user/', views.user_data, name='user_data'), 
+    url(r'^view_issues_groups/', views.view_issues_user_groups, name='view_issues_user_groups'),
+    url(r'^issue_edit/(?P<number>[0-9]+)/$', views.issue_edit, name='issue_edit'),
 ]

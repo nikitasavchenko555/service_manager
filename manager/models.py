@@ -171,17 +171,10 @@ class equipment(models.Model): #список оборудования
 
         return self.name
 
-        #return name
 
-    #def __str__(self):
-#надо разобраться с методами
-
-        #return self.model
 
 class issues(models.Model):
-    #class Meta:
-        # делает уникальным направление обмена
-        #unique_together = ("equipment_model", "equipment_inventory")
+    
     number_issue = models.IntegerField(primary_key=True)
     level_issue = models.ForeignKey(level_issue)
     current_status = models.ForeignKey(status_issue)
