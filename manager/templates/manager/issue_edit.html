@@ -98,7 +98,7 @@
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Тип оборудования</label></td>
-				<td id="my_select">{{ form.equipment_name }}
+				<td>{{ issue.equipment_name }}
 			        </td>
 
 				
@@ -106,16 +106,16 @@
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Модель</label></td>
-                                <td><select id="model"></select></td>
+                                <td>{{ model }}</td>
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Инвентарный №</label></td>
- 				<td><select id="inventory"></select><input id="request_equipment" border="2px"  type="button" value="Сохранить"/><p id="succes_equipment"></p></td>
+ 				<td>{{ issue.equipment.inventory_number }}</td>
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Инициатор</label></td>
 				<td>
-				{{ form.creator }}
+				{{ issue.creator }}
 				</td>
 			</tr>
 			<tr>

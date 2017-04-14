@@ -11,6 +11,8 @@ import re
 
 global mod_list
 mod_list = []
+type_list = []
+inv_list = []
 
 def index(request):
     issue = issues.objects.order_by("-change_date")
@@ -32,10 +34,28 @@ def user_data(request):
             result = 2
         
         return render(request, 'manager/log_user.html', { 'current_user': current_user, 'result': result })
+#функция для получения переменной с типом оборудования из ajax post-запроса
+def get_type(request):
 
+        type_id = request.POST.get('cat_id')
+
+        if type_id != None:
+
+             type_list.append(type_id)
+             
+             t = type_list[0]
+             
+             return t
+
+        else:
+
+             t = type_list[0]
+             type_list.clear()
+             return t
 
 #функция для получения переменной с именем модели из ajax post-запроса
 def get_model(request):
+
         mod_id = request.POST.get('model')
 
         if mod_id != None:
@@ -49,18 +69,19 @@ def get_model(request):
         else:
 
              t = mod_list[0]
-
+             mod_list.clear()
              return t
 #функция для получения переменной с инвентарным номером оборудования из ajax post-запроса
 def get_inventory(request):
         inv = request.POST.get('num')
 
         if inv != None: 
-            mod_list.append(inv)
-            return mod_list
+            inv_list.append(inv)
+            t = inv_list[0]
+            return t
         else:
-            t = mod_list[1]
-            mod_list.clear()
+            t = inv_list[0]
+            inv_list.clear()
             return t
 
 
@@ -74,6 +95,12 @@ def create_issue(request):
         if request.is_ajax() == True:
              if request.method == "GET":
                     #cat_id = request.GET['name'] не работает, нужно использовать строку ниже
+                space = request.GET.get('space')
+                if space != None:
+                    space_id = workspace.objects.get(name=space)
+                    type_inventory = str(equipment.objects.get_name(space_id.id))
+                    dist_work = re.findall(r'[\d\w\s,-]+', type_inventory)
+                    return HttpResponse(dist_work)
                 cat_id = request.GET.get('name')
                 if cat_id != None:
                     model = str(equipment.objects.get_model(cat_id))
@@ -88,31 +115,24 @@ def create_issue(request):
                 if inv_num != None:
                      sender = str(equipment.objects.check_inventory(inv_num))
                      send_dist = re.findall(r'[\d\w,]+', sender)
-                     result = "Оборудование успешно выбрано"
+                     result = "Оборудование успешно выбрано №%s, тип %s, модель %s" % (inv_num, space, cat_id)
                      return HttpResponse(result)
-             '''if request.method == "POST":
-                 m = request
-                 mod_id = request.POST.get('model')
-                 mod_list.append(mod_id)
-                 inv_num_id = request.POST.get('num')
-                 mod_list.append(m)
-                 return HttpResponse(mod_id)'''
-        
+            
         if request.method == "POST":
              #print(request)
              form = IssuesForm(request.POST)
              if request.is_ajax() == True:
+                 type_id = get_type(request)
                  mod_id = get_model(request)
-                 #mod_list.append(mod_id)
                  inv_num_id = get_inventory(request)
-                 #mod_list.append(inv_num_id)
-                 result = "Выбор сохранен успешно"
-                 return HttpResponse(result)
+                 result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
+                 return HttpResponse(result, inv_num_id)
+             name = get_type(request)
              model = get_model(request)
              inventory = get_inventory(request)
-             #return HttpResponse(inventory)
              if form.is_valid():
                      new_issues = form.save(commit=False)
+                     new_issues.equipment_name = equipment.objects.get(name=name)
                      new_issues.equipment_model = equipment.objects.get(model=model)
                      new_issues.equipment_inventory = equipment.objects.get(inventory_number=inventory)
                      new_issues.number_issue = num_view
@@ -120,7 +140,6 @@ def create_issue(request):
                      new_issues.user_edit = request.user
                      new_issues.change_date = timezone.now()
                      new_issues.save()
-                     #mod_list = []
                      return redirect('/index/')
              else:
                      return  HttpResponse("Форма невалидна")
@@ -139,6 +158,8 @@ def issue_edit(request, number):
 
     issue = get_object_or_404(issues, number_issue=number)
     number_history = issue.number_history+1
+    name = str(issue.equipment_name)
+    model = str(equipment.objects.get_model(name))
     if request.method == "POST":
         form = IssuesForm(request.POST, instance=issue)
         if form.is_valid():
@@ -149,7 +170,7 @@ def issue_edit(request, number):
              issue.save()
     else:
         form = IssuesForm(instance=issue)
-    return render(request, 'manager/issue_edit.html', {'form': form })
+    return render(request, 'manager/issue_edit.html', {'form': form, 'issue': issue, 'model': model })
             
     
 

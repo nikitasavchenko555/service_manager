@@ -1,7 +1,7 @@
 $(document).ready(function() {
-$("#my_select").click( function(event) {
+$("#type_inventory").click( function(event) {
        var catid;
-       catid = $("#my_select option:selected").text();
+       catid = $("#type_inventory option:selected").text();
        $.get('/index/create_issue/', {name: catid}, function(message){ 
         var mod;
         arr = message.split(',,')

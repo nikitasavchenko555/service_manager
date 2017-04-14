@@ -20,6 +20,7 @@
 <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
 <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
 <script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+<script type="text/javascript" src="/static/manager/workspace.js"></script>
 <script type="text/javascript" src="/static/manager/model_list.js"></script>
 <script type="text/javascript" src="/static/manager/inventory_list.js"></script>
 <script type="text/javascript" src="/static/manager/sender.js"></script>
@@ -92,17 +93,14 @@
 			
 			<tr>
 				<td class="tr_main"><label>Подразделение</label></td>
-				<td>
+				<td id="my_work">
 				{{ form.workspace }}
 				</td>
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Тип оборудования</label></td>
-				<td id="my_select">{{ form.equipment_name }}
+				<td><select id="type_inventory"></select>
 			        </td>
-
-				
-				</td>
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Модель</label></td>

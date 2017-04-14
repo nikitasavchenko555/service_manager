@@ -12,12 +12,13 @@ def uknown_user():
     return id
 
 class equipment_manager(models.Manager):
-     def get_name(self):
+     def get_name(self, workspace):
          from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""
             SELECT DISTINCT e.name
-            FROM manager_equipment e""")
+            FROM manager_equipment e
+            where e.workspace_id=%s""", [workspace])
          result_list = [row for row in cursor.fetchall()]
 
          def __str__(self):

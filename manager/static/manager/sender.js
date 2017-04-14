@@ -37,7 +37,7 @@ $("#request_equipment").click( function(event) {
     }
     });
        var sender = $("#inventory option:selected").text();
-       var catid = $("#my_select option:selected").text();
+       var catid = $("#type_inventory option:selected").text();
        var mode = $("#model option:selected").text();
        $.post('/index/create_issue/',
        {

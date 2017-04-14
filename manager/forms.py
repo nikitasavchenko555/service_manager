@@ -9,7 +9,7 @@ class IssuesForm(ModelForm):
      #equipment_inventory = equipment.inventory_number
      class Meta:
          model = issues
-         fields = ['level_issue', 'current_status', 'brief_description', 'start_down_date', 'start_down_time', 'start_issue_date', 'start_issue_time', 'workspace', 'equipment_name', 'creator', 'groups_of_work', 'coordinator', 'executor', 'progress', 'group_of_reason', 'solution', 'comment', 'close_down_date', 'close_down_time', 'close_issue_date', 'close_issue_time']
+         fields = ['level_issue', 'current_status', 'brief_description', 'start_down_date', 'start_down_time', 'start_issue_date', 'start_issue_time', 'workspace',  'creator', 'groups_of_work', 'coordinator', 'executor', 'progress', 'group_of_reason', 'solution', 'comment', 'close_down_date', 'close_down_time', 'close_issue_date', 'close_issue_time']
          widgets = {'progress': forms.Textarea, 'brief_description': forms.Textarea }
          
          
