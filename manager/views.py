@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import *
 from django.http import Http404
-from .forms import IssuesForm, TestForm
+from .forms import IssuesForm, IssuesEditForm
 from django.views.i18n import *
 from django.contrib.auth.models import User
 from login.models import *
@@ -86,12 +86,13 @@ def get_inventory(request):
 
 
 
-            
+#view создания инцидента            
 def create_issue(request):
         new_issues = issues()
         number = issues.objects.values('number_issue').order_by().last()
         num_view = number['number_issue']+1
         form = IssuesForm()
+        #заполняем поля для выбора об-я через ajax
         if request.is_ajax() == True:
              if request.method == "GET":
                     #cat_id = request.GET['name'] не работает, нужно использовать строку ниже
@@ -115,7 +116,9 @@ def create_issue(request):
                 if inv_num != None:
                      sender = str(equipment.objects.check_inventory(inv_num))
                      send_dist = re.findall(r'[\d\w,]+', sender)
-                     result = "Оборудование успешно выбрано №%s, тип %s, модель %s" % (inv_num, space, cat_id)
+                     result = "Оборудование успешно выбрано, нажмите кнопку ""Сохранить"""
+                     #строка для диагностики
+                     #result = "Оборудование успешно выбрано №%s, тип %s, модель %s" % (inv_num, space, cat_id)
                      return HttpResponse(result)
             
         if request.method == "POST":
@@ -125,15 +128,17 @@ def create_issue(request):
                  type_id = get_type(request)
                  mod_id = get_model(request)
                  inv_num_id = get_inventory(request)
-                 result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
+                 result = "Выбор сохранен успешно" 
+                 #строка для диагностики
+                 #result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
                  return HttpResponse(result, inv_num_id)
              name = get_type(request)
              model = get_model(request)
              inventory = get_inventory(request)
              if form.is_valid():
                      new_issues = form.save(commit=False)
-                     new_issues.equipment_name = equipment.objects.get(name=name)
-                     new_issues.equipment_model = equipment.objects.get(model=model)
+                     new_issues.equipment_name = equipment.objects.filter(name=name).last()
+                     new_issues.equipment_model = equipment.objects.filter(model=model).last()
                      new_issues.equipment_inventory = equipment.objects.get(inventory_number=inventory)
                      new_issues.number_issue = num_view
                      new_issues.number_history = "1"
@@ -155,25 +160,58 @@ def view_issue(request, number):
     return render(request, 'manager/issue.html', {'issue': issue })
 
 def issue_edit(request, number):
-
+    
     issue = get_object_or_404(issues, number_issue=number)
+    #вытягивает данные по тем полям, которых не будет в форме, иначе не сохраним модель
+    workspace = issue.workspace
+    number = issue.number_issue
+    creator = issue.creator_id
+    inv_number = issue.equipment_inventory_id
+    model_id = issue.equipment_model_id
+    type_eq = issue.equipment_name_id
+    form = IssuesEditForm(instance=issue)
     number_history = issue.number_history+1
-    name = str(issue.equipment_name)
-    model = str(equipment.objects.get_model(name))
+    name_id = int(issue.equipment_name_id)
+    #получаем результат запроса для вывода модели и №
+    #получаем модель
+    model = equipment.objects.filter(pk=name_id)
+    model_result = str(model.values_list('model'))
+    dist_model = re.sub(r'QuerySet', ' ' , model_result)
+    dist_model_result = str(re.findall(r'([А-Я]+|[A-Z]+|[0-9]+)', dist_model))
+    dist_model_result = re.sub("(\['|\'])", ' ', dist_model_result)
+    #получаем №
+    inv_num = str(model.values_list('inventory_number'))
+    dist_num = re.sub(r'QuerySet', ' ' , inv_num)
+    dist_num_result = str(re.findall(r'([А-Я]+|[A-Z]+|[0-9]+)', dist_num))
+    dist_num_result = re.sub("(\['|\'])", ' ', dist_num_result)
+    #dist_inv = re.findall(r'[\d\w]+', inv_num)
     if request.method == "POST":
-        form = IssuesForm(request.POST, instance=issue)
-        if form.is_valid():
-             issue = form.save(commit=False)
-             issue.number_history = number_history
-             issue.user_edit = request.user
-             issue.change_date = timezone.now()
-             issue.save()
-    else:
-        form = IssuesForm(instance=issue)
-    return render(request, 'manager/issue_edit.html', {'form': form, 'issue': issue, 'model': model })
+        form = IssuesEditForm(request.POST)
+        if request.is_ajax() == True:
+            result_save = "Изменения сохранены"
+            return  HttpResponse(result_save)
+            if form.is_valid():
+                 test = request.POST.get('test')
+                 issue = form.save(commit=False)
+                 issue.workspace = workspace
+                 issue.creator_id = creator
+                 issue.number_issue = number
+                 issue.equipment_inventory_id = inv_number
+                 issue.equipment_model_id = model_id
+                 issue.equipment_name_id = type_eq
+                 issue.number_history = number_history
+                 issue.user_edit = request.user
+                 issue.change_date = timezone.now()
+                 #issue.save()
+                 result_save = "Изменения сохранены"
+                 return  HttpResponse(result_save)
+            else:
+                 result_save = "Форма невалидна"
+                 return  HttpResponse(result_save)
+    return render(request, 'manager/issue_edit.html', {'form': form, 'issue': issue,  'dist_model': dist_model_result, 'dist_num_result': dist_num_result })
             
     
-
+#список инцидентов, созданных или находящихся в работе у пользователя
 def view_issues_user(request):
         user_warn = request.user
         current_user = UserProfile.objects.get(user=request.user)
@@ -195,6 +233,10 @@ def view_issues_user(request):
 
         return render(request, 'manager/issues_user.html', {'issue_user': issue_user })
 
+
+
+
+#список инцидентов, созданных или находящихся в работе у группы пользователя
 def view_issues_user_groups(request):
         user_warn = request.user
         current_user = UserProfile.objects.get(user=request.user)
@@ -209,6 +251,30 @@ def view_issues_user_groups(request):
                 issues_groups = issues.objects.filter(groups_of_work=current_user_group)
 
         return render(request, 'manager/issues_group.html', {'issues_groups': issues_groups })
+
+#список инцидентов, ожидающих ответа от пользователя
+def view_issues_user_wait(request):
+        user_warn = request.user
+        current_user = UserProfile.objects.get(user=request.user)
+        issues_user = current_user
+        current_user_role = str(current_user.id_state)
+        if user_warn.is_authenticated:
+
+            if current_user_role == "Координатор":
+                
+                issue_wait = issues.objects.filter(coordinator=current_user, current_status=1)
+
+            elif current_user_role == "Инициатор":
+                
+                issue_wait = issues.objects.filter(creator=current_user, current_status=(5, 6, 7))
+
+            elif current_user_role == "Исполнитель":
+                
+                issue_wait = issues.objects.filter(executor=current_user, current_status=2)
+
+        return render(request, 'manager/issue_user_wait.html', {'issue_wait': issue_wait })
+
+
 
 
 

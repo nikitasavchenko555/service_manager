@@ -10,7 +10,7 @@
 <script type="text/javascript" src="/static/admin/js/core.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
-<!--<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.min.js"></script>-->
+
 <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
 <script type="text/javascript" src="/static/admin/js/inlines.min.js"></script>
 <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
@@ -20,9 +20,7 @@
 <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
 <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
 <script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
-<script type="text/javascript" src="/static/manager/model_list.js"></script>
-<script type="text/javascript" src="/static/manager/inventory_list.js"></script>
-<script type="text/javascript" src="/static/manager/sender.js"></script>
+<script type="text/javascript" src="/static/manager/issue_edit_save.js"></script>
 </head>
 	<body>
 	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
@@ -36,7 +34,7 @@
 	<table border=1px width=100%>
 		<thead>
 			<tr class="tr_head">
-				<th colspan="2"><a class="back"  href="{% url 'index' %}">На главную</a>Редактирование инцидента №{{ num_view }}</th>
+				<th colspan="2" ><a class="back"  href="{% url 'index' %}">На главную</a>Редактирование инцидента №<p id="number">{{ issue.number_issue }}</p></th>
 			</tr>
 		<thead>
 		<tbody>
@@ -93,7 +91,7 @@
 			<tr>
 				<td class="tr_main"><label>Подразделение</label></td>
 				<td>
-				{{ form.workspace }}
+				{{ issue.workspace }}
 				</td>
 			</tr>
 			<tr>
@@ -106,11 +104,11 @@
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Модель</label></td>
-                                <td>{{ model }}</td>
+                                <td>{{ dist_model }}</td>
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Инвентарный №</label></td>
- 				<td>{{ issue.equipment.inventory_number }}</td>
+ 				<td>{{ dist_num_result }}</td>
 			</tr>
 			<tr>
 				<td class="tr_main"><label>Инициатор</label></td>
@@ -179,8 +177,8 @@
 				</td>
 			</tr>
 			<tr class="tr_main">
-			<td colspan="2">
-			<input border="2px"  type="submit" value="Сохранить"/>
+			<td colspan="2" >
+			<input id="save" border="2px" type="submit" value="Сохранить"/>
 			</td>
 			</tr>
 		</tbody>

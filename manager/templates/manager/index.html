@@ -21,7 +21,7 @@
 	<ul>
         <li><a href="{% url 'view_issues_user' %}" target="_blank">Мои инциденты</a></li>
         <li><a href="{% url 'view_issues_user_groups' %}" target="_blank">Инциденты моей группы</a></li>
-        <li><a href="#">Инциденты, ожидающие ответа</a></li>
+        <li><a href="{% url 'view_issues_user_wait' %}" target="_blank">Инциденты, ожидающие ответа</a></li>
         </ul>	
 	</li>
   	<li><a class="menu" href="#">Поиск инцидентов</a>
@@ -68,7 +68,7 @@
 <!--заполнение использовано для тестирования-->
 			{% for issue in issues %}
 			<!--<a href="{% url 'view_issue' number=issue.number_issue %}" target="_blank" class="visit">-->
-			<tr class="tr_click" onclick="openWin('{% url 'issue_edit' number=issue.number_issue %}')">
+			<tr class="tr_click" onclick="openWin('{% url 'view_issue' number=issue.number_issue %}')">
 				<td>{{ issue.number_issue }}</td>
 				<td>{{ issue.level_issue }}</td>
 				<td>{{ issue.current_status }}</td>

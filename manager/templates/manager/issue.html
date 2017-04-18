@@ -16,7 +16,8 @@
 	<table border=1px width=100%>
 		<thead>
 			<tr class="tr_head">
-				<th colspan="2"><a class="back"  href="{% url 'index' %}">На главную</a>Просмотр инцидента № {{ issue.number_issue }}</th>
+				<th colspan="2"><a class="back"  href="{% url 'index' %}">На главную</a>Просмотр инцидента № {{ issue.number_issue }}
+<a class="forward"  href="{% url 'issue_edit' number=issue.number_issue %}">Редактировать</a></th>
 			</tr>
 		<thead>
 		<tbody>
@@ -130,11 +131,6 @@
 				</td>
 			</tr>
 			<!--кнопку показывать только при редактировании-->
-			<tr class="tr_main">
-			<td colspan="2">
-			<input border="2px"  type="submit" value="Сохранить"/>
-			</td>
-			</tr>
 			
 		</tbody>
 	</form>

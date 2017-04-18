@@ -172,6 +172,11 @@ class equipment(models.Model): #список оборудования
 
         return self.name
 
+    def test_method(self):
+
+        return str(self.model)
+
+
 
 
 class issues(models.Model):
