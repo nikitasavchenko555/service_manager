@@ -14,6 +14,8 @@ mod_list = []
 type_list = []
 inv_list = []
 
+
+
 def index(request):
     issue = issues.objects.order_by("-change_date")
     return render(request, 'manager/index.html', {'issues': issue })
@@ -122,7 +124,6 @@ def create_issue(request):
                      return HttpResponse(result)
             
         if request.method == "POST":
-             #print(request)
              form = IssuesForm(request.POST)
              if request.is_ajax() == True:
                  type_id = get_type(request)
@@ -160,7 +161,6 @@ def view_issue(request, number):
     return render(request, 'manager/issue.html', {'issue': issue })
 
 def issue_edit(request, number):
-    
     issue = get_object_or_404(issues, number_issue=number)
     #вытягивает данные по тем полям, которых не будет в форме, иначе не сохраним модель
     workspace = issue.workspace
@@ -169,7 +169,6 @@ def issue_edit(request, number):
     inv_number = issue.equipment_inventory_id
     model_id = issue.equipment_model_id
     type_eq = issue.equipment_name_id
-    form = IssuesEditForm(instance=issue)
     number_history = issue.number_history+1
     name_id = int(issue.equipment_name_id)
     #получаем результат запроса для вывода модели и №
@@ -184,30 +183,37 @@ def issue_edit(request, number):
     dist_num = re.sub(r'QuerySet', ' ' , inv_num)
     dist_num_result = str(re.findall(r'([А-Я]+|[A-Z]+|[0-9]+)', dist_num))
     dist_num_result = re.sub("(\['|\'])", ' ', dist_num_result)
-    #dist_inv = re.findall(r'[\d\w]+', inv_num)
+    form = IssuesEditForm(instance=issue)
     if request.method == "POST":
-        form = IssuesEditForm(request.POST)
-        if request.is_ajax() == True:
-            result_save = "Изменения сохранены"
-            return  HttpResponse(result_save)
+            form = IssuesEditForm(request.POST)
+            if request.is_ajax() == True:
+                         issue = get_object_or_404(issues, number_issue=number)
+                         number_check = number_history-1
+                         if issue.number_history == number_check: 
+                             result_save_succes = "Изменения сохранены"
+                             return  HttpResponse(result_save_succes)
+                         else:
+                             result_save_unsucces = "Сохранение не произошло"
+                             return  HttpResponse(result_save_unsucces)
             if form.is_valid():
-                 test = request.POST.get('test')
-                 issue = form.save(commit=False)
-                 issue.workspace = workspace
-                 issue.creator_id = creator
-                 issue.number_issue = number
-                 issue.equipment_inventory_id = inv_number
-                 issue.equipment_model_id = model_id
-                 issue.equipment_name_id = type_eq
-                 issue.number_history = number_history
-                 issue.user_edit = request.user
-                 issue.change_date = timezone.now()
-                 #issue.save()
-                 result_save = "Изменения сохранены"
-                 return  HttpResponse(result_save)
+               issue = form.save(commit=False)
+               issue.workspace = workspace
+               issue.creator_id = creator
+               issue.number_issue = number
+               issue.equipment_inventory_id = inv_number
+               issue.equipment_model_id = model_id
+               issue.equipment_name_id = type_eq
+               issue.number_history = number_history
+               issue.user_edit = request.user
+               issue.change_date = timezone.now()
+               issue.save()
+               if not issue.save:
+                  return  HttpResponse("База данных недоступна. Попробуйте позднее")
             else:
-                 result_save = "Форма невалидна"
-                 return  HttpResponse(result_save)
+               result_save_unsucces = "Форма невалидна"
+               return  HttpResponse(result_save_unsucces)
+                 
+        
     return render(request, 'manager/issue_edit.html', {'form': form, 'issue': issue,  'dist_model': dist_model_result, 'dist_num_result': dist_num_result })
             
     

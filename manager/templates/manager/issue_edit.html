@@ -29,7 +29,7 @@
         {% block content %}
         {% include "manager/log_user.html" %}
         {% endblock %}
-	<form  method="POST">
+	<form  method="POST" id="form">
 		{% csrf_token %}	
 	<table border=1px width=100%>
 		<thead>

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-$("#save").click( function(event) {
+$("#save").click(setTimeout(function(event) {
          
          function getCookie(name) {
          var cookieValue = null;
@@ -28,17 +28,20 @@ $("#save").click( function(event) {
         }
     }
     });
-    number_is = $("#number").text();
-    link = '/index/issue_edit/'+number_is+'/';
+    var number_is = $("#number").text();
+    var form = $("#form").html();
+    var link = '/index/issue_edit/'+number_is+'/';
+    //alert(link);
     $.post(link,
        {
-        test: number_is
+         number: number_is
+
 	},
-    
-    function()
-	{
-	   alert("ПолучилосЬ")
+    function(data)
+        {
+           alert(data);
 	});
-});
+    
+}), 2000);
 });
 
