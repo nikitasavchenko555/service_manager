@@ -47,6 +47,10 @@ class IssuesEditForm(ModelForm):
          self.fields['close_issue_date'].widget = widgets.AdminDateWidget()
          self.fields['close_issue_time'].widget = widgets.AdminTimeWidget()
          self.fields['progress'].initial = timezone.now()
+
+class ReportForm(forms.Form):
+       start_period = forms.CharField(widget=AdminDateWidget())
+       end_period = forms.CharField(widget=AdminDateWidget())
          
 
 

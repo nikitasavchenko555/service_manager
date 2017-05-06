@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import *
 from django.http import Http404
-from .forms import IssuesForm, IssuesEditForm
+from .forms import IssuesForm, IssuesEditForm, ReportForm
 from django.views.i18n import *
 from django.contrib.auth.models import User
 from login.models import *
@@ -279,6 +279,21 @@ def view_issues_user_wait(request):
                 issue_wait = issues.objects.filter(executor=current_user, current_status=2)
 
         return render(request, 'manager/issue_user_wait.html', {'issue_wait': issue_wait })
+
+
+
+def view_reports(request):
+        #issue = issues.objects.filter(start_issue_date)     
+        form =  ReportForm()
+        if request.is_ajax() == True:
+             start_period = request.POST.get('start_period')
+             end_period = request.POST.get('end_period')
+             format_report = request.POST.get('format')
+             result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (start_period, end_period, format_report)
+             return  HttpResponse(result)
+        return render(request, 'manager/report_page.html', {'form': form })
+
+
 
 
 

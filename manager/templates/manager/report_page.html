@@ -1,0 +1,98 @@
+{% load staticfiles %}
+<html>
+<head>
+<title>Отчёты</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<head>
+<link rel="stylesheet" href="{% static 'css/time.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+<!--<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.min.js"></script>-->
+<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="/static/admin/js/inlines.min.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="/static/admin/js/actions.js"></script>
+<script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+<script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+<script type="text/javascript" src="/static/manager/report_form.js"></script>
+</head>
+<script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+</head>
+	<body>
+	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
+	<h1>Система управления инцидентами</h1>
+	<br></br>
+        {% block content %}
+        {% include 'manager/log_user.html' %}
+        {% endblock %}
+	<ul id="navbar">
+  	<li><a class="menu" href="{% url 'create_issue' %}" target="_blank">Создать инцидент</a></li>
+  	<li><a class="menu" href="#">Список инцидентов</a>
+	<ul>
+        <li><a href="{% url 'view_issues_user' %}" target="_blank">Мои инциденты</a></li>
+        <li><a href="{% url 'view_issues_user_groups' %}" target="_blank">Инциденты моей группы</a></li>
+        <li><a href="{% url 'view_issues_user_wait' %}" target="_blank">Инциденты, ожидающие ответа</a></li>
+        </ul>	
+	</li>
+  	<li><a class="menu" href="#">Поиск инцидентов</a>
+	<ul>
+        <li><a href="#">Поиск по номеру</a></li>
+        <li><a href="#">Поиск по содержимому</a></li>
+        </ul>
+	</li>
+  	<li><a class="menu" href="#">Отчёты</a>
+	</li>
+	<li><a class="menu" href="#">Статистика</a>
+	<ul>
+        <li><a href="#">Простои</a></li>
+        <li><a href="#">Динамика аварий</a></li>
+        </ul>	
+	</li>
+	<li><a class="menu" href="#">Справка</a>	
+	</li>
+	<li><a class="exit"  href="/login/logout/">Выход</a></li>
+	</ul>
+	<br>
+	<br>
+        <table border=1px width=100%>
+	<thead>
+			<tr class="tr_head">
+		<th colspan="2"><a class="back"  href="{% url 'index' %}">На главную</a>Создание отчёта</th>
+			</tr>
+		</thead>
+		<tbody class="tr_body">
+                <tr>
+		<td class="tr_main"><label>Выберите начало периода</label></td>
+		<td id="start" class="form-group">{{ form.start_period }}
+		</td>
+		</tr>
+                <tr>
+		<td class="tr_main"><label>Выберите конец периода</label></td>
+		<td id="end"class="form-group">{{ form.end_period }}
+		</td>
+		</tr>
+		<tr>
+		<td class="tr_main"><label>Выберите формат отчёта</label></td>
+                <td><select id="format">
+                <option>Документ PDF</option>
+                <option>Таблица XLS</option>
+                <option>Документ DOC</option>
+                </select>
+		</td>
+		</tr>
+                <tr class="tr_main">
+			<td id="sender" colspan="2">
+			<input  border="2px"  type="submit" value="Создать"/>
+			</td>
+			</tr>
+		</tbody>
+        </table>
+	<script src="{% static 'manager/link.js' %}"></script>
+	</body>
+</html>

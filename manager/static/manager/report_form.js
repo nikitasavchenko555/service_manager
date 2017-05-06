@@ -1,24 +1,24 @@
-//$(document).ready(function() {
-$("#form").submit(setTimeout(function(event) {
-         
+$(document).ready(function() {
+$("#sender").click( function(event) { 
+       
          function getCookie(name) {
          var cookieValue = null;
          if (document.cookie && document.cookie != '') {
          var cookies = document.cookie.split(';');
          for (var i = 0; i < cookies.length; i++) {
             var cookie = jQuery.trim(cookies[i]);
-             
+            
             if (cookie.substring(0, name.length + 1) == (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
             }
-       }
+        }
     }
     return cookieValue;
 }
        var csrftoken = getCookie('csrftoken');
        function csrfSafeMethod(method) {
-    
+    // these HTTP methods do not require CSRF protection
           return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
        }
     $.ajaxSetup({
@@ -28,20 +28,19 @@ $("#form").submit(setTimeout(function(event) {
         }
     }
     });
-    var number_is = $("#number").text();
-    var form = $("#form").html();
-    var link = '/index/issue_edit/'+number_is+'/';
-    //alert(link);
-    $.post(link,
+       var start = $("#start option:selected").text();
+       var end = $("#end option:selected").text();
+       var format = $("#format option:selected").text();
+       $.post('/index/reports/',
        {
-         number: number_is
-
+	  start_period: start,
+          end_period: end,
+          format: format
 	},
-    function(data)
-        {
-           alert(data);
+        function(data)
+	{
+	   //$('#succes_equipment').html(data)
+           alert(data)
 	});
-    
-}), 2000);
-//});
-
+});
+});
