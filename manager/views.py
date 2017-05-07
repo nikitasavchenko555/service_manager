@@ -187,10 +187,10 @@ def issue_edit(request, number):
     if request.method == "POST":
             form = IssuesEditForm(request.POST)
             if request.is_ajax() == True:
-                         issue = get_object_or_404(issues, number_issue=number)
-                         number_check = number_history-1
-                         if issue.number_history == number_check: 
-                             result_save_succes = "Изменения сохранены"
+                         issue1 = get_object_or_404(issues, number_issue=number)
+                         #number_check = number_history-1
+                         if issue1.number_history == (number_history-1): 
+                             result_save_succes = "Изменения сохранены "
                              return  HttpResponse(result_save_succes)
                          else:
                              result_save_unsucces = "Сохранение не произошло"
@@ -289,7 +289,7 @@ def view_reports(request):
              start_period = request.POST.get('start_period')
              end_period = request.POST.get('end_period')
              format_report = request.POST.get('format')
-             result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (start_period, end_period, format_report)
+             result = "Выбор сохранен успешно %s, %s, %s" % (start_period, end_period, format_report)
              return  HttpResponse(result)
         return render(request, 'manager/report_page.html', {'form': form })
 

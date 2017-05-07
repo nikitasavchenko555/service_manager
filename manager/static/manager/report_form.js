@@ -1,24 +1,24 @@
-$(document).ready(function() {
-$("#sender").click( function(event) { 
-       
+function Sender() {
+         var django = django || {};
+         django.jQuery = $;
          function getCookie(name) {
          var cookieValue = null;
          if (document.cookie && document.cookie != '') {
          var cookies = document.cookie.split(';');
          for (var i = 0; i < cookies.length; i++) {
             var cookie = jQuery.trim(cookies[i]);
-            
+             
             if (cookie.substring(0, name.length + 1) == (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
             }
-        }
+       }
     }
     return cookieValue;
 }
        var csrftoken = getCookie('csrftoken');
        function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
+    
           return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
        }
     $.ajaxSetup({
@@ -31,6 +31,7 @@ $("#sender").click( function(event) {
        var start = $("#start option:selected").text();
        var end = $("#end option:selected").text();
        var format = $("#format option:selected").text();
+       alert(start);
        $.post('/index/reports/',
        {
 	  start_period: start,
@@ -42,5 +43,6 @@ $("#sender").click( function(event) {
 	   //$('#succes_equipment').html(data)
            alert(data)
 	});
-});
-});
+};
+
+

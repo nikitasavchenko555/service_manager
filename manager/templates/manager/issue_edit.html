@@ -10,7 +10,6 @@
 <script type="text/javascript" src="/static/admin/js/core.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
-
 <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
 <script type="text/javascript" src="/static/admin/js/inlines.min.js"></script>
 <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
@@ -29,7 +28,7 @@
         {% block content %}
         {% include "manager/log_user.html" %}
         {% endblock %}
-	<form  method="POST" id="form">
+	<form  method="POST">
 		{% csrf_token %}	
 	<table border=1px width=100%>
 		<thead>
@@ -178,7 +177,7 @@
 			</tr>
 			<tr class="tr_main">
 			<td colspan="2" >
-			<input id="save" border="2px" type="submit" value="Сохранить"/>
+			<input id="save" border="2px" type="submit" onclick="Save_edit_issue()" value="Сохранить"/>
 			</td>
 			</tr>
 		</tbody>
@@ -188,8 +187,6 @@
     var django = django || {};
     django.jQuery = $;
 </script>
-<!--<script type="text/javascript" src="/admin/jsi18n/"></script>-->
-
 {{ form.media }}
 {% endblock %}
 </form>

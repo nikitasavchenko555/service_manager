@@ -3,14 +3,12 @@
 <head>
 <title>Отчёты</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<head>
 <link rel="stylesheet" href="{% static 'css/time.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <script type="text/javascript" src="/admin/jsi18n/"></script>
 <script type="text/javascript" src="/static/admin/js/core.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
-<!--<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.min.js"></script>-->
 <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
 <script type="text/javascript" src="/static/admin/js/inlines.min.js"></script>
 <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
@@ -21,13 +19,12 @@
 <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
 <script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
 <script type="text/javascript" src="/static/manager/report_form.js"></script>
-</head>
-<script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>-->
 </head>
 	<body>
 	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
 	<h1>Система управления инцидентами</h1>
-	<br></br>
+	<br>
         {% block content %}
         {% include 'manager/log_user.html' %}
         {% endblock %}
@@ -74,7 +71,7 @@
 		</tr>
                 <tr>
 		<td class="tr_main"><label>Выберите конец периода</label></td>
-		<td id="end"class="form-group">{{ form.end_period }}
+		<td id="end" class="form-group">{{ form.end_period }}
 		</td>
 		</tr>
 		<tr>
@@ -87,12 +84,19 @@
 		</td>
 		</tr>
                 <tr class="tr_main">
-			<td id="sender" colspan="2">
-			<input  border="2px"  type="submit" value="Создать"/>
+			<td  colspan="2">
+			<input id="sender" border="2px"  type="button" onclick="Sender()" value="Создать"/>
 			</td>
 			</tr>
 		</tbody>
         </table>
-	<script src="{% static 'manager/link.js' %}"></script>
-	</body>
+{% block footer_js %}
+<script>
+    var django = django || {};
+    django.jQuery = $;
+</script>
+{{ form.media }}
+{% endblock %}
+<script src="{% static 'manager/link.js' %}"></script>
+</body>
 </html>

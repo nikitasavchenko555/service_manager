@@ -1,6 +1,6 @@
-//$(document).ready(function() {
-$("#form").submit(setTimeout(function(event) {
-         
+function Save_edit_issue() {
+         var django = django || {};
+         django.jQuery = $;
          function getCookie(name) {
          var cookieValue = null;
          if (document.cookie && document.cookie != '') {
@@ -29,9 +29,8 @@ $("#form").submit(setTimeout(function(event) {
     }
     });
     var number_is = $("#number").text();
-    var form = $("#form").html();
     var link = '/index/issue_edit/'+number_is+'/';
-    //alert(link);
+    
     $.post(link,
        {
          number: number_is
@@ -41,7 +40,7 @@ $("#form").submit(setTimeout(function(event) {
         {
            alert(data);
 	});
-    
-}), 2000);
-//});
+};
+
+setTimeout(Save_edit_issue, 2000);
 
