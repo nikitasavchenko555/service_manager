@@ -57,6 +57,8 @@
 	</ul>
 	<br>
 	<br>
+        <form  method="POST" id="form_send" action="javascript:void(null);" onsubmit="Sender()">
+		{% csrf_token %}	
         <table border=1px width=100%>
 	<thead>
 			<tr class="tr_head">
@@ -66,12 +68,12 @@
 		<tbody class="tr_body">
                 <tr>
 		<td class="tr_main"><label>Выберите начало периода</label></td>
-		<td id="start" class="form-group">{{ form.start_period }}
+		<td id="start">{{ form.start_period }}
 		</td>
 		</tr>
                 <tr>
 		<td class="tr_main"><label>Выберите конец периода</label></td>
-		<td id="end" class="form-group">{{ form.end_period }}
+		<td id="end">{{ form.end_period }}
 		</td>
 		</tr>
 		<tr>
@@ -85,11 +87,12 @@
 		</tr>
                 <tr class="tr_main">
 			<td  colspan="2">
-			<input id="sender" border="2px"  type="button" onclick="Sender()" value="Создать"/>
+			<input id="sender" border="2px"  type="submit"  value="Создать"/>
 			</td>
 			</tr>
 		</tbody>
         </table>
+        </form>
 {% block footer_js %}
 <script>
     var django = django || {};

@@ -28,15 +28,15 @@ function Sender() {
         }
     }
     });
-       var start = $("#start option:selected").text();
-       var end = $("#end option:selected").text();
-       var format = $("#format option:selected").text();
-       alert(start);
+       //var start = $("#start").val();
+       //var end = $("#end").text();
+       var format_rep = $("#format option:selected").text();
+       //alert(start);
+       var form_send = $('#form_send').serialize();
        $.post('/index/reports/',
        {
-	  start_period: start,
-          end_period: end,
-          format: format
+	  data: form_send,
+          format: format_rep
 	},
         function(data)
 	{

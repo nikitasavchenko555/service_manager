@@ -60,6 +60,32 @@ class equipment_manager(models.Manager):
          check_list = [row for row in cursor.fetchall()]
         
          return check_list
+
+
+class IssueManager(models.Manager):
+
+      def get_report(self, start_period_result, end_period_result):
+         from django.db import connection
+         cursor = connection.cursor()
+         cursor.execute("""SELECT  i.number_issue, i.level_issue_id, s.status, i.start_down_date, i.close_down_date, w.name, e.name, e.model, e.inventory_number, au.username
+FROM manager_issues i, manager_status_issue s, manager_equipment e, manager_level_issue li,
+manager_workspace w,  manager_groups_of_reason gr, auth_user au
+where i.level_issue_id = li.id
+and i.current_status_id = s.id
+and i.workspace_id = w.id
+and i.equipment_name_id = e.id
+and i.group_of_reason_id  = gr.id
+and i.creator_id = au.id
+--and i.executor_id = au.id
+--and i.coordinator_id = au.id
+and i.start_down_date > (timestamp %s)::date""", [start_period_result])
+         result_report = [row for row in cursor.fetchall()]
+#and i.close_down_date < (timestamp %s)::date
+         def __str__(self):
+
+              return self.name 
+        
+         return result_report
          
 
 
@@ -130,17 +156,7 @@ class State(models.Model):#словарь статусов сотруднико�
         return self.description
 
 
-'''class workers(models.Model): #список сотрудников
-    position = models.CharField(max_length=200)
-    fio = models.CharField(max_length=200)
-    id_state = models.ForeignKey(State)
-    change_date = models.DateTimeField(default = timezone.now)
-    user_edit = models.ForeignKey('auth.User', default=uknown_user)
-    class Meta:
-        verbose_name = 'Список сотрудников'
-        verbose_name_plural = 'Списки сотрудников'
-    def __str__(self):
-        return self.fio'''
+
 
    
 
@@ -208,12 +224,13 @@ class issues(models.Model):
     close_issue_date = models.DateField(blank=True, null=True)
     close_issue_time = models.TimeField(blank=True, null=True)
     user_edit = models.ForeignKey('auth.User', default=uknown_user)
+    issue_objects = IssueManager()
     class Meta:
         verbose_name = 'Инцидент'
         verbose_name_plural = 'Инциденты'
 
 
-#IssuesEqupmentFormSet = inlineformset_factory(Issues, equipment)
+
 
 
 

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import *
+from datetime import datetime, date, time
 from django.http import Http404
 from .forms import IssuesForm, IssuesEditForm, ReportForm
 from django.views.i18n import *
@@ -283,16 +284,24 @@ def view_issues_user_wait(request):
 
 
 def view_reports(request):
-        #issue = issues.objects.filter(start_issue_date)     
         form =  ReportForm()
         if request.is_ajax() == True:
-             start_period = request.POST.get('start_period')
-             end_period = request.POST.get('end_period')
+             form_send = request.POST.get('data')
+             start_period = re.findall(r'(start_period=[0-9.]+)', form_send)
+             start_period = str(start_period)
+             start_period_result = str(re.findall(r'([0-9.]+)', start_period))
+             start_period_result = str(re.sub("(\['|\'])", '', start_period_result))
+             end_period = re.findall(r'(end_period=[0-9.]+)', form_send)
+             end_period = str(end_period)
+             end_period_result = str(re.findall(r'([0-9.]+)', start_period))
+             end_period_result = str(re.sub("(\['|\'])", '', end_period_result))
              format_report = request.POST.get('format')
-             result = "Выбор сохранен успешно %s, %s, %s" % (start_period, end_period, format_report)
-             return  HttpResponse(result)
+             start_period_result = datetime.strptime(str(start_period_result), "%d.%m.%Y")
+             end_period_result = datetime.strptime(str(end_period_result), "%d.%m.%Y")
+             report = issues.issue_objects.get_report(start_period_result, end_period_result)
+             result = "Выбор сохранен успешно %s" % (report)
+             return  HttpResponse(report)
         return render(request, 'manager/report_page.html', {'form': form })
-
 
 
 
