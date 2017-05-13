@@ -7,8 +7,8 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <script type="text/javascript" src="/admin/jsi18n/"></script>
 <script type="text/javascript" src="/static/admin/js/core.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
 <script type="text/javascript" src="/static/admin/js/inlines.min.js"></script>
 <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
@@ -19,7 +19,6 @@
 <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
 <script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
 <script type="text/javascript" src="/static/manager/report_form.js"></script>
-<!--<script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>-->
 </head>
 	<body>
 	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
@@ -68,7 +67,7 @@
 		<tbody class="tr_body">
                 <tr>
 		<td class="tr_main"><label>Выберите начало периода</label></td>
-		<td id="start">{{ form.start_period }}
+		<td id="start" class="form-group">{{ form.start_period }}
 		</td>
 		</tr>
                 <tr>
@@ -76,7 +75,7 @@
 		<td id="end">{{ form.end_period }}
 		</td>
 		</tr>
-		<tr>
+		<!--<tr>
 		<td class="tr_main"><label>Выберите формат отчёта</label></td>
                 <td><select id="format">
                 <option>Документ PDF</option>
@@ -84,7 +83,9 @@
                 <option>Документ DOC</option>
                 </select>
 		</td>
-		</tr>
+		</tr>-->
+                <tr id="succes_report">
+                </tr>
                 <tr class="tr_main">
 			<td  colspan="2">
 			<input id="sender" border="2px"  type="submit"  value="Создать"/>

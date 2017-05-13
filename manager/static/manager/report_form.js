@@ -40,8 +40,21 @@ function Sender() {
 	},
         function(data)
 	{
-	   //$('#succes_equipment').html(data)
-           alert(data)
+           
+           //l = $('#succes_report').text(data);
+           //alert(data);
+           document.location.href = data;
+           //var blob = new Blob([data], { type: 'application/excel' });
+           //alert(blob);
+           //var url = URL.createObjectURL(blob);
+           var link = document.createElement('a');
+           link.setAttribute('href', data);
+           link.setAttribute("download", data);
+           var event = document.createEvent('MouseEvents');
+           event.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+           link.dispatchEvent(event);
+           //alert("Отчёт выгружен");
+           
 	});
 };
 

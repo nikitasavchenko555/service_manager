@@ -15,5 +15,6 @@ urlpatterns = [
     url(r'^view_issues_groups/', views.view_issues_user_groups, name='view_issues_user_groups'),
     url(r'^issue_edit/(?P<number>[0-9]+)/$', views.issue_edit, name='issue_edit'),
     url(r'^reports/', views.view_reports, name='view_reports'),
+    #url(r'^reports/manager+', views.upload_report, name='upload_report'),
     
 ]

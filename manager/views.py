@@ -8,10 +8,13 @@ from django.contrib.auth.models import User
 from login.models import *
 from django.http import HttpResponse
 from django.core import serializers
+from django.conf import settings
+from wsgiref.util import FileWrapper
 import re
 import xlwt
 import xlrd
 import openpyxl
+import os
 
 global mod_list
 mod_list = []
@@ -45,17 +48,19 @@ def get_type(request):
 
         type_id = request.POST.get('cat_id')
 
-        if type_id != None:
+        if type_id != "":
 
              type_list.append(type_id)
              
              t = type_list[0]
              
+             type_list.clear()
+             
              return t
 
         else:
-
-             t = type_list[0]
+             t = ""
+             #t = type_list[0]
              type_list.clear()
              return t
 
@@ -64,31 +69,34 @@ def get_model(request):
 
         mod_id = request.POST.get('model')
 
-        if mod_id != None:
+        if mod_id != "":
 
              mod_list.append(mod_id)
              
-             t = mod_list[0]
+             m = mod_list[0]
              
-             return t
+             mod_list.clear()
+             
+             return m
 
         else:
 
-             t = mod_list[0]
+             m = ""
              mod_list.clear()
-             return t
+             return m
 #функция для получения переменной с инвентарным номером оборудования из ajax post-запроса
 def get_inventory(request):
         inv = request.POST.get('num')
 
-        if inv != None: 
+        if inv != "": 
             inv_list.append(inv)
-            t = inv_list[0]
-            return t
-        else:
-            t = inv_list[0]
+            i = inv_list[0]
             inv_list.clear()
-            return t
+            return i
+        else:
+            i = ""
+            inv_list.clear()
+            return i
 
 
 
@@ -101,7 +109,6 @@ def create_issue(request):
         #заполняем поля для выбора об-я через ajax
         if request.is_ajax() == True:
              if request.method == "GET":
-                    #cat_id = request.GET['name'] не работает, нужно использовать строку ниже
                 space = request.GET.get('space')
                 if space != None:
                     space_id = workspace.objects.get(name=space)
@@ -119,12 +126,11 @@ def create_issue(request):
                     dist_inventory = re.findall(r'[\d\w,]+', inventory)
                     return HttpResponse(dist_inventory)
                 inv_num = request.GET.get('send')
+                #добавить обнуление переменных
                 if inv_num != None:
                      sender = str(equipment.objects.check_inventory(inv_num))
                      send_dist = re.findall(r'[\d\w,]+', sender)
                      result = "Оборудование успешно выбрано, нажмите кнопку ""Сохранить"""
-                     #строка для диагностики
-                     #result = "Оборудование успешно выбрано №%s, тип %s, модель %s" % (inv_num, space, cat_id)
                      return HttpResponse(result)
             
         if request.method == "POST":
@@ -133,10 +139,13 @@ def create_issue(request):
                  type_id = get_type(request)
                  mod_id = get_model(request)
                  inv_num_id = get_inventory(request)
-                 result = "Выбор сохранен успешно" 
+                 if type_id != "" or mod_id != "" or inv_num_id != "":
+                     result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
+                 else:
+                     result = "Выбор не сохранен.Выберите все необходимые поля №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
                  #строка для диагностики
                  #result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
-                 return HttpResponse(result, inv_num_id)
+                 return HttpResponse(result)
              name = get_type(request)
              model = get_model(request)
              inventory = get_inventory(request)
@@ -292,17 +301,17 @@ def view_reports(request):
              form_send = request.POST.get('data')
              start_period = re.findall(r'(start_period=[0-9.]+)', form_send)
              start_period = str(start_period)
-             start_period_result = str(re.findall(r'([0-9.]+)', start_period))
-             start_period_result = str(re.sub("(\['|\'])", '', start_period_result))
+             start_period_result_1 = str(re.findall(r'([0-9.]+)', start_period))
+             start_period_result_2 = str(re.sub("(\['|\'])", '', start_period_result_1))
              end_period = re.findall(r'(end_period=[0-9.]+)', form_send)
              end_period = str(end_period)
-             end_period_result = str(re.findall(r'([0-9.]+)', end_period))
-             end_period_result = str(re.sub("(\['|\'])", '', end_period_result))
+             end_period_result_1 = str(re.findall(r'([0-9.]+)', end_period))
+             end_period_result_2 = str(re.sub("(\['|\'])", '', end_period_result_1))
              format_report = request.POST.get('format')
-             start_period_result = datetime.strptime(str(start_period_result), "%d.%m.%Y")
-             end_period_result = datetime.strptime(str(end_period_result), "%d.%m.%Y")
+             start_period_result = datetime.strptime(str(start_period_result_2), "%d.%m.%Y")
+             end_period_result = datetime.strptime(str(end_period_result_2), "%d.%m.%Y")
              #блок работы с Excel
-             page_save = "/home/nikita/Отчёт_"+str(start_period_result)+"_"+str(end_period_result)+".xls"
+             filename = "Отчёт_"+str(start_period_result_2)+"_"+str(end_period_result_2)+".xls"
              report_book = openpyxl.Workbook()
              report_sheet = report_book.create_sheet("Инциденты")
              report_sheet.cell(row=1, column=1).value = "№ инцидента"
@@ -328,21 +337,23 @@ def view_reports(request):
                      for r in report[rep]:
                            report_sheet.cell(row=i, column=j).value = r
                            j = j+1
-             report_book.save(page_save)
-             #result = "Выбор сохранен успешно %s" % (start_period_pesult)
-             #return HttpResponse(report_book, mimetype='application/octet-stream')
-             #return  HttpResponse("Отчёт создан")
-             fp = open(page_save, "rb");
-             response = HttpResponse(fp.read());
-             fp.close();
-             #file_type = mimetype.guess_type(page_save);
-             #if file_type is None:
-             file_type = 'application/octet-stream';
-             response['Content-Type'] = file_type
-             response['Content-Length'] = str(os.stat(page_save).st_size);
-             response['Content-Disposition'] = "attachment; filename=%s.xls" % (page_save);
-             return response;
+             page_path = './manager/reports/%s' % (filename)
+             report_book.save(page_path)
+             path = '/home/nikita/test_django/test_diplom/service_manager/manager/reports/%s' % (filename)
+             #return  HttpResponse(path)
+             return upload_report(path, filename)
         return render(request, 'manager/report_page.html', {'form': form })
+
+def upload_report(path, filename):
+    with open(path, "rb") as excel:
+         data = excel.read()                  
+    #response = HttpResponse(data)
+    response = HttpResponse(FileWrapper(open(path, "rb")), content_type='application/excel')
+    response["Content-Type"] = 'application/excel'
+    #response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
+    response['Content-Length'] = os.path.getsize(path)
+    response['X-Accel-Redirect'] = path
+    return response
 
 
 
