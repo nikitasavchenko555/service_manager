@@ -9,6 +9,9 @@ from login.models import *
 from django.http import HttpResponse
 from django.core import serializers
 import re
+import xlwt
+import xlrd
+import openpyxl
 
 global mod_list
 mod_list = []
@@ -293,14 +296,52 @@ def view_reports(request):
              start_period_result = str(re.sub("(\['|\'])", '', start_period_result))
              end_period = re.findall(r'(end_period=[0-9.]+)', form_send)
              end_period = str(end_period)
-             end_period_result = str(re.findall(r'([0-9.]+)', start_period))
+             end_period_result = str(re.findall(r'([0-9.]+)', end_period))
              end_period_result = str(re.sub("(\['|\'])", '', end_period_result))
              format_report = request.POST.get('format')
              start_period_result = datetime.strptime(str(start_period_result), "%d.%m.%Y")
              end_period_result = datetime.strptime(str(end_period_result), "%d.%m.%Y")
-             report = issues.issue_objects.get_report(start_period_result, end_period_result)
-             result = "Выбор сохранен успешно %s" % (report)
-             return  HttpResponse(report)
+             #блок работы с Excel
+             page_save = "/home/nikita/Отчёт_"+str(start_period_result)+"_"+str(end_period_result)+".xls"
+             report_book = openpyxl.Workbook()
+             report_sheet = report_book.create_sheet("Инциденты")
+             report_sheet.cell(row=1, column=1).value = "№ инцидента"
+             report_sheet.cell(row=1, column=2).value = "Уровень"
+             report_sheet.cell(row=1, column=3).value = "Статус"
+             report_sheet.cell(row=1, column=4).value = "Дата начала простоя"
+             report_sheet.cell(row=1, column=5).value = "Время начала простоя"
+             report_sheet.cell(row=1, column=6).value = "Дата создания инцидента"
+             report_sheet.cell(row=1, column=7).value = "Время создания инцидента"
+             report_sheet.cell(row=1, column=8).value = "Дата окончания простоя"
+             report_sheet.cell(row=1, column=9).value = "Время начала простоя"
+             report_sheet.cell(row=1, column=10).value = "Поздразделение"
+             report_sheet.cell(row=1, column=11).value = "Наименование"
+             report_sheet.cell(row=1, column=12).value = "Модель"
+             report_sheet.cell(row=1, column=13).value = "Инвентарный №"
+             report_sheet.cell(row=1, column=14).value = "Координатор"
+             i = 1
+             j = 1
+             report = equipment.objects.get_report(start_period_result, end_period_result)
+             for rep in range(len(report)):
+                     i = i+1
+                     j = 1
+                     for r in report[rep]:
+                           report_sheet.cell(row=i, column=j).value = r
+                           j = j+1
+             report_book.save(page_save)
+             #result = "Выбор сохранен успешно %s" % (start_period_pesult)
+             #return HttpResponse(report_book, mimetype='application/octet-stream')
+             #return  HttpResponse("Отчёт создан")
+             fp = open(page_save, "rb");
+             response = HttpResponse(fp.read());
+             fp.close();
+             #file_type = mimetype.guess_type(page_save);
+             #if file_type is None:
+             file_type = 'application/octet-stream';
+             response['Content-Type'] = file_type
+             response['Content-Length'] = str(os.stat(page_save).st_size);
+             response['Content-Disposition'] = "attachment; filename=%s.xls" % (page_save);
+             return response;
         return render(request, 'manager/report_page.html', {'form': form })
 
 
