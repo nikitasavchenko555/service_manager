@@ -18,12 +18,13 @@ from django.contrib import admin
 from login import views
 from manager import views
 from django import *   
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/', include('login.urls')),
-    #url(r'^index/', include('manager.urls')),
     url(r'index/', include('manager.urls')),
-    #url(r'^admin/jsi18n', django.views.i18n.javascript_catalog, name='jsi18n'),
-]
+     
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

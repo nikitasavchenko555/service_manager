@@ -1,0 +1,68 @@
+{% load staticfiles %}
+<html>
+<head>
+<title>Поиск инцидентов</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<link rel="stylesheet" href="{% static 'css/time.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="/static/admin/js/inlines.min.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="/static/admin/js/actions.js"></script>
+<script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+<script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+<script type="text/javascript" src="/static/manager/report_form.js"></script>
+</head>
+	<body>
+	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
+	<h1>Система управления инцидентами</h1>
+	<br>
+        {% block content %}
+        {% include 'manager/log_user.html' %}
+        {% endblock %}
+	<ul id="navbar">
+  	<li><a class="menu" href="{% url 'create_issue' %}" target="_blank">Создать инцидент</a></li>
+  	<li><a class="menu" href="#">Список инцидентов</a>
+	<ul>
+        <li><a href="{% url 'view_issues_user' %}" target="_blank">Мои инциденты</a></li>
+        <li><a href="{% url 'view_issues_user_groups' %}" target="_blank">Инциденты моей группы</a></li>
+        <li><a href="{% url 'view_issues_user_wait' %}" target="_blank">Инциденты, ожидающие ответа</a></li>
+        </ul>	
+	</li>
+  	<li><a class="menu" href="#">Поиск инцидентов</a>
+	<ul>
+        <li><a href="{% url 'find_issues' %}">Поиск по номеру</a></li>
+        <li><a href="{% url 'find_issues' %}">Поиск по содержимому</a></li>
+        </ul>
+	</li>
+  	<li><a class="menu" href="#">Отчёты</a>
+	</li>
+	<li><a class="menu" href="#">Статистика</a>
+	<ul>
+        <li><a href="#">Простои</a></li>
+        <li><a href="#">Динамика аварий</a></li>
+        </ul>	
+	</li>
+	<li><a class="menu" href="#">Справка</a>	
+	</li>
+	<li><a class="exit"  href="/login/logout/">Выход</a></li>
+	</ul>
+	<br>
+	<br>
+        {% block footer_js %}
+<script>
+    var django = django || {};
+    django.jQuery = $;
+</script>
+{{ form.media }}
+{% endblock %}
+<script src="{% static 'manager/link.js' %}"></script>
+</body>
+</html>

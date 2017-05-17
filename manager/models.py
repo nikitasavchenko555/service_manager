@@ -220,6 +220,16 @@ class issues(models.Model):
         verbose_name_plural = 'Инциденты'
 
 
+class Reports(models.Model):
+    creator = models.ForeignKey('auth.User')
+    report = models.FileField(upload_to = "report/")
+    
+    class Meta:
+        verbose_name = 'Отчёт'
+        verbose_name_plural = 'Отчёты'
+
+
+
 
 
 

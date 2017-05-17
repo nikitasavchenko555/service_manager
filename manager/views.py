@@ -9,7 +9,7 @@ from login.models import *
 from django.http import HttpResponse
 from django.core import serializers
 from django.conf import settings
-from wsgiref.util import FileWrapper
+from django.core.files import File
 import re
 import xlwt
 import xlrd
@@ -25,24 +25,16 @@ inv_list = []
 
 def index(request):
     issue = issues.objects.order_by("-change_date")
-    return render(request, 'manager/index.html', {'issues': issue })
+    user_warn = request.user
+    if user_warn.is_authenticated:
+        current_user = UserProfile.objects.get(user=user_warn)
+        current_user_role = str(current_user.id_state)   
+        return render(request, 'manager/index.html', {'issues': issue, 'current_user_role': current_user_role })
+    
+    else:
 
+        return redirect('/login/')
 
-def user_data(request):
-        user_warn = request.user
-        if user_warn.is_authenticated:
-
-            current_user = UserProfile.objects.get(user=user_warn)
- 
-            result = 1
-           
-        else:
-
-            current_user = UserProfile.objects.get(user=user_warn)
-
-            result = 2
-        
-        return render(request, 'manager/log_user.html', { 'current_user': current_user, 'result': result })
 #функция для получения переменной с типом оборудования из ajax post-запроса
 def get_type(request):
 
@@ -102,6 +94,11 @@ def get_inventory(request):
 
 #view создания инцидента            
 def create_issue(request):
+    user_warn = request.user
+
+    if user_warn.is_authenticated:
+
+        current_user_role = UserProfile.objects.get(user=user_warn)
         new_issues = issues()
         number = issues.objects.values('number_issue').order_by().last()
         num_view = number['number_issue']+1
@@ -162,42 +159,68 @@ def create_issue(request):
                      return redirect('/index/')
              else:
                      return  HttpResponse("Форма невалидна")
-        return render(request, 'manager/create_issue.html', {'form': form, 'num_view': num_view } )
+        return render(request, 'manager/create_issue.html', {'form': form, 'num_view': num_view, 'current_user_role': current_user_role } )
+    else:
+        return redirect('/login/')
     
 
 
 def view_issue(request, number):
-    try:
-        issue = issues.objects.get(number_issue=number)
-    except:
-        raise Http404
-    return render(request, 'manager/issue.html', {'issue': issue })
+
+        user_warn = request.user
+        
+        if user_warn.is_authenticated:
+
+            current_user = UserProfile.objects.get(user=user_warn)
+           
+            current_user_role = str(current_user.id_state)
+             
+            issue = get_object_or_404(issues, number_issue=number)
+
+            return render(request, 'manager/issue.html', {'issue': issue, 'current_user_role': current_user_role })
+
+        else:
+
+            return redirect('/login/')
+    
+        
 
 def issue_edit(request, number):
-    issue = get_object_or_404(issues, number_issue=number)
+
+    user_warn = request.user
+    
+    if user_warn.is_authenticated:
+
+         current_user = UserProfile.objects.get(user=user_warn)
+        
+         current_user_role = str(current_user.id_state)
+
+         issue = issues.objects.get(number_issue=number)
+
+         issue = get_object_or_404(issues, number_issue=number)
     #вытягивает данные по тем полям, которых не будет в форме, иначе не сохраним модель
-    workspace = issue.workspace
-    number = issue.number_issue
-    creator = issue.creator_id
-    inv_number = issue.equipment_inventory_id
-    model_id = issue.equipment_model_id
-    type_eq = issue.equipment_name_id
-    number_history = issue.number_history+1
-    name_id = int(issue.equipment_name_id)
+         workspace = issue.workspace
+         number = issue.number_issue
+         creator = issue.creator_id
+         inv_number = issue.equipment_inventory_id
+         model_id = issue.equipment_model_id
+         type_eq = issue.equipment_name_id
+         number_history = issue.number_history+1
+         name_id = int(issue.equipment_name_id)
     #получаем результат запроса для вывода модели и №
     #получаем модель
-    model = equipment.objects.filter(pk=name_id)
-    model_result = str(model.values_list('model'))
-    dist_model = re.sub(r'QuerySet', ' ' , model_result)
-    dist_model_result = str(re.findall(r'([А-Я]+|[A-Z]+|[0-9]+)', dist_model))
-    dist_model_result = re.sub("(\['|\'])", ' ', dist_model_result)
+         model = equipment.objects.filter(pk=name_id)
+         model_result = str(model.values_list('model'))
+         dist_model = re.sub(r'QuerySet', ' ' , model_result)
+         dist_model_result = str(re.findall(r'([А-Я]+|[A-Z]+|[0-9]+)', dist_model))
+         dist_model_result = re.sub("(\['|\'])", ' ', dist_model_result)
     #получаем №
-    inv_num = str(model.values_list('inventory_number'))
-    dist_num = re.sub(r'QuerySet', ' ' , inv_num)
-    dist_num_result = str(re.findall(r'([А-Я]+|[A-Z]+|[0-9]+)', dist_num))
-    dist_num_result = re.sub("(\['|\'])", ' ', dist_num_result)
-    form = IssuesEditForm(instance=issue)
-    if request.method == "POST":
+         inv_num = str(model.values_list('inventory_number'))
+         dist_num = re.sub(r'QuerySet', ' ' , inv_num)
+         dist_num_result = str(re.findall(r'([А-Я]+|[A-Z]+|[0-9]+)', dist_num))
+         dist_num_result = re.sub("(\['|\'])", ' ', dist_num_result)
+         form = IssuesEditForm(instance=issue)
+         if request.method == "POST":
             form = IssuesEditForm(request.POST)
             if request.is_ajax() == True:
                          issue1 = get_object_or_404(issues, number_issue=number)
@@ -227,7 +250,13 @@ def issue_edit(request, number):
                return  HttpResponse(result_save_unsucces)
                  
         
-    return render(request, 'manager/issue_edit.html', {'form': form, 'issue': issue,  'dist_model': dist_model_result, 'dist_num_result': dist_num_result })
+         return render(request, 'manager/issue_edit.html', {'form': form, 'issue': issue,  'dist_model': dist_model_result, 'dist_num_result': dist_num_result, 'current_user_role': current_user_role })
+           
+    else:
+
+         return redirect('/login/')
+
+    
             
     
 #список инцидентов, созданных или находящихся в работе у пользователя
@@ -250,8 +279,10 @@ def view_issues_user(request):
                 
                 issue_user = issues.objects.filter(executor=current_user)
 
-        return render(request, 'manager/issues_user.html', {'issue_user': issue_user })
+            return render(request, 'manager/issues_user.html', {'issue_user': issue_user, 'current_user_role': current_user_role })
+        else:
 
+            return redirect('/login/')
 
 
 
@@ -260,43 +291,57 @@ def view_issues_user_groups(request):
         user_warn = request.user
         current_user = UserProfile.objects.get(user=request.user)
         issues_user = current_user
-        
-        if current_user.group_of_work_id != None:
-            current_user_group = str(current_user.group_of_work_id)
-        else:
-            current_user_group = current_user.group_of_work_id
         if user_warn.is_authenticated:
+            if current_user.group_of_work_id != None:
+                current_user_group = str(current_user.group_of_work_id)
+            else:
+                current_user_group = current_user.group_of_work_id
+        
+            issues_groups = issues.objects.filter(groups_of_work=current_user_group)
+                
+            current_user_role = str(current_user.id_state)
 
-                issues_groups = issues.objects.filter(groups_of_work=current_user_group)
+            return render(request, 'manager/issues_group.html', {'issues_groups': issues_groups, 'current_user_role': current_user_role })
+        else:
 
-        return render(request, 'manager/issues_group.html', {'issues_groups': issues_groups })
+            return redirect('/login/')
 
 #список инцидентов, ожидающих ответа от пользователя
 def view_issues_user_wait(request):
-        user_warn = request.user
+    user_warn = request.user
+    if user_warn.is_authenticated:
+        
         current_user = UserProfile.objects.get(user=request.user)
         issues_user = current_user
         current_user_role = str(current_user.id_state)
-        if user_warn.is_authenticated:
-
-            if current_user_role == "Координатор":
+       
+        if current_user_role == "Координатор":
                 
                 issue_wait = issues.objects.filter(coordinator=current_user, current_status=1)
 
-            elif current_user_role == "Инициатор":
+        elif current_user_role == "Инициатор":
                 
                 issue_wait = issues.objects.filter(creator=current_user, current_status=(5, 6, 7))
 
-            elif current_user_role == "Исполнитель":
+        elif current_user_role == "Исполнитель":
                 
                 issue_wait = issues.objects.filter(executor=current_user, current_status=2)
 
-        return render(request, 'manager/issue_user_wait.html', {'issue_wait': issue_wait })
+        return render(request, 'manager/issue_user_wait.html', {'issue_wait': issue_wait, 'current_user_role': current_user_role })
+
+    else:
+
+        return redirect('/login/')
 
 
 
 def view_reports(request):
+    user_warn = request.user
+    if user_warn.is_authenticated:
         form =  ReportForm()
+        current_user = UserProfile.objects.get(user=request.user)
+        issues_user = current_user
+        current_user_role = str(current_user.id_state)
         if request.is_ajax() == True:
              form_send = request.POST.get('data')
              start_period = re.findall(r'(start_period=[0-9.]+)', form_send)
@@ -337,23 +382,37 @@ def view_reports(request):
                      for r in report[rep]:
                            report_sheet.cell(row=i, column=j).value = r
                            j = j+1
-             page_path = './manager/reports/%s' % (filename)
-             report_book.save(page_path)
-             path = '/home/nikita/test_django/test_diplom/service_manager/manager/reports/%s' % (filename)
-             #return  HttpResponse(path)
-             return upload_report(path, filename)
-        return render(request, 'manager/report_page.html', {'form': form })
 
-def upload_report(path, filename):
-    with open(path, "rb") as excel:
-         data = excel.read()                  
-    #response = HttpResponse(data)
-    response = HttpResponse(FileWrapper(open(path, "rb")), content_type='application/excel')
-    response["Content-Type"] = 'application/excel'
-    #response['Content-Disposition'] = 'attachment; filename=%s' % (filename)
-    response['Content-Length'] = os.path.getsize(path)
-    response['X-Accel-Redirect'] = path
-    return response
+             page_path = os.path.join(settings.MEDIA_ROOT,  'reports/%s' % (filename))
+             page_save = 'reports/%s' % (filename)
+             #report_book.save(page_path)
+             rep = report_book
+             #new_report = Reports(creator=request.user, report = page_path)
+             #new_report.save()
+             return  HttpResponse(page_save)
+        return render(request, 'manager/report_page.html', {'form': form, 'current_user_role': current_user_role })
+
+    else:
+
+        return redirect('/login/')
+
+def find_issues(request):
+        user_warn = request.user
+        if user_warn.is_authenticated:
+            current_user = UserProfile.objects.get(user=request.user)
+            issues_user = current_user
+            current_user_role = str(current_user.id_state)
+            if request.is_ajax() == True:
+                find_number = request.GET.get('num')
+                issue = issues.objects.filter(number_issue=find_number).order_by("-change_date")
+                return HttpResponse(issue)
+                #return render(request, 'manager/find_issues.html', {'issue': issue, 'current_user_role': current_user_role })
+            return render(request, 'manager/find_issues.html', {'current_user_role': current_user_role })
+        else:
+
+            return redirect('/login/')
+
+        
 
 
 

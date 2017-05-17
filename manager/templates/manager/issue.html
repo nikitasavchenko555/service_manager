@@ -10,7 +10,9 @@
 	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
 	<h1>Система управления инцидентами</h1>
 	<br></br>
-	
+        {% block content %}
+        {% include 'manager/log_user.html' %}
+        {% endblock %}
 	<form action="/login/" method="POST">
 		{% csrf_token %}	
 	<table border=1px width=100%>
@@ -121,7 +123,7 @@
 			<tr>
 				<td class="tr_main">Время окончания простоя</td>
 				<td>
-				{{ issue. }}
+				{{ issue.close_down_time }}
 				</td>
 			</tr>
 			<tr>
@@ -133,6 +135,13 @@
 			<!--кнопку показывать только при редактировании-->
 			
 		</tbody>
+{% block footer_js %}
+<script>
+    var django = django || {};
+    django.jQuery = $;
+</script>
+{{ form.media }}
+{% endblock %}
 	</form>
 </body>
 <html>

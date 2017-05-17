@@ -51,6 +51,10 @@ class IssuesEditForm(ModelForm):
 class ReportForm(forms.Form):
        start_period = forms.CharField(widget=widgets.AdminDateWidget())
        end_period = forms.DateField(widget=widgets.AdminDateWidget())
+
+class Search_for_Number(forms.Form):
+       number = forms.IntegerField()
+       
          
 
 
