@@ -76,6 +76,43 @@ where i.start_down_date between (timestamp %s)::date and (timestamp %s)::date"""
               return self.name 
         
          return result_report
+
+     def get_source(self, search):
+         from django.db import connection
+         cursor = connection.cursor()
+         cursor.execute("""select * from issues_report_2 il
+where (il.name like '\%%S\%')
+or (il.model like '%%S%') 
+or (il.number_issue::text like '%%S%') 
+or (il.status like '%%S%') 
+or (il.name_equipment like '%%S%')
+or (il.inventory_number::text like '%%S%')
+or (il.coordinator like '%%S%');""", [search])
+         result_report = [row for row in cursor.fetchall()]
+
+         def __str__(self):
+
+              return self.name 
+        
+         return result_source
+
+
+     def get_number(self, number):
+         from django.db import connection
+         cursor = connection.cursor()
+         cursor.execute("""select il.number_issue, il.level_issue_id, il.status, mi.brief_description, au.username as creator, il.coordinator
+from issues_report_2 il, manager_issues mi, auth_user au, login_userprofile lu
+where mi.number_issue = il.number_issue
+and mi.creator_id = lu.id
+and lu.user_id = au.id
+and il.number_issue =%s;""", [number])
+         result_number = [row for row in cursor.fetchall()]
+
+         def __str__(self):
+
+              return self.name 
+        
+         return result_number
          
 
 

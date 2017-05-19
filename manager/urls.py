@@ -14,5 +14,7 @@ urlpatterns = [
     url(r'^view_issues_groups/', views.view_issues_user_groups, name='view_issues_user_groups'),
     url(r'^issue_edit/(?P<number>[0-9]+)/$', views.issue_edit, name='issue_edit'),
     url(r'^reports/', views.view_reports, name='view_reports'),    
-    url(r'^find_issues/', views.find_issues, name='find_issues'),    
+    url(r'^find_issues/', views.find_issues, name='find_issues'),
+    url(r'^view_statistic_downtime/', views.view_statistic_downtime, name='view_statistic_downtime'),
+    url(r'^view_statistic_issues/', views.view_statistic_issues, name='view_statistic_issues'),    
 ]

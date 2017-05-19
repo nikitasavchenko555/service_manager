@@ -35,27 +35,12 @@ function Sender() {
        var form_send = $('#form_send').serialize();
        $.post('/index/reports/',
        {
-	  data: form_send,
-          format: format_rep
+	  data: form_send
 	},
         function(data)
 	{
-           
-           
            report_link = '<td>Отчёт успешно создан</td><td><a href="/media/'+data+'" download>Скачать</link></td>'
            $('#succes_report').html(report_link);
-           //alert(report_link);
-           //document.location.href = data;
-           //var blob = new Blob([data], { type: 'application/excel' });
-           //alert(blob);
-           //var url = URL.createObjectURL(blob);
-           //var link = document.createElement('a');
-           //link.setAttribute('href', data);
-           //link.setAttribute("download", data);
-           //var event = document.createEvent('MouseEvents');
-           //event.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
-           //link.dispatchEvent(event);
-           //alert("Отчёт выгружен");
            
 	}
 );

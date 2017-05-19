@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <html>
 <head>
-<title>Поиск инцидентов</title>
+<title>Простои</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <link rel="stylesheet" href="{% static 'css/time.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -18,24 +18,23 @@
 <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
 <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
 <script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
-<script type="text/javascript" src="/static/manager/Searcher.js"></script>
 </head>
 <body>
 {% block menu %}
 {% include 'manager/menu.html' %}
 {% endblock %}
 <!--<form  method="POST" id="form_send"> <!--action="javascript:void(null);" onsubmit="Searcher()">-->
-		{% csrf_token %}	
+			
         <table border=1px width=100%>
 	<thead>
 			<tr class="tr_head">
-		<th colspan="2"><a class="back"  href="{% url 'index' %}">На главную</a>Поиск инцидентов</th>
+		<th colspan="2"><a class="back"  href="{% url 'index' %}">На главную</a>Статистика простоев</th>
 			</tr>
 		</thead>
 		<tbody class="tr_body">
                 <tr>
 		<td class="tr_main"><label>Введите номер инцидента</label></td>
-		<td  class="form-group"><input id="find_number" type="text"></input>
+		<td  class="form-group"><input type="text" id="find_number"></input>
 		</td>
 		</tr>
                 <tr class="tr_main">
@@ -60,9 +59,17 @@
 				<th>Координатор</th>
 			</tr>
 		</thead>
-		<tbody id="sucess" class="tr_body">
-			
-			<!--<tr class="tr_click" onclick="openWin(' url 'view_issue' number=issue.number_issue ')"></tr>-->
+		<tbody class="tr_body">
+			{% for issue in issues %}
+			<tr  id="sucess" class="tr_click" onclick="openWin('{% url 'view_issue' number=issue.number_issue %}')">
+				<td ></td>
+				<td>{{ issue.level_issue }}</td>
+				<td>{{ issue.current_status }}</td>
+				<td>{{ issue.brief_description }}</td>
+				<td>{{ issue.creator }}</td>
+				<td>{{ issue.coordinator }}</td>
+			</tr>
+			{% endfor %}
 		<tbody>
         <!--</form>-->
 {% block footer_js %}

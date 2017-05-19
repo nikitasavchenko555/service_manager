@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import *
 from datetime import datetime, date, time
 from django.http import Http404
-from .forms import IssuesForm, IssuesEditForm, ReportForm
+from .forms import IssuesForm, IssuesEditForm, ReportForm, Search_for_Number
 from django.views.i18n import *
 from django.contrib.auth.models import User
 from login.models import *
@@ -385,10 +385,10 @@ def view_reports(request):
 
              page_path = os.path.join(settings.MEDIA_ROOT,  'reports/%s' % (filename))
              page_save = 'reports/%s' % (filename)
-             #report_book.save(page_path)
+             report_book.save(page_path)
              rep = report_book
-             #new_report = Reports(creator=request.user, report = page_path)
-             #new_report.save()
+             new_report = Reports(creator=request.user, report = page_path)
+             new_report.save()
              return  HttpResponse(page_save)
         return render(request, 'manager/report_page.html', {'form': form, 'current_user_role': current_user_role })
 
@@ -399,6 +399,22 @@ def view_reports(request):
 def find_issues(request):
         user_warn = request.user
         if user_warn.is_authenticated:
+            form = Search_for_Number()
+            current_user = UserProfile.objects.get(user=request.user)
+            issues_user = current_user
+            current_user_role = str(current_user.id_state)
+            if request.is_ajax() == True:
+                find_number = int(request.GET.get('num'))
+                issue = equipment.objects.get_number(find_number)
+                return HttpResponse(issue)
+            return render(request, 'manager/find_issues.html', {'form': form, 'current_user_role': current_user_role })
+        else:
+
+            return redirect('/login/')
+
+def view_statistic_downtime(request):
+        user_warn = request.user
+        if user_warn.is_authenticated:
             current_user = UserProfile.objects.get(user=request.user)
             issues_user = current_user
             current_user_role = str(current_user.id_state)
@@ -407,7 +423,23 @@ def find_issues(request):
                 issue = issues.objects.filter(number_issue=find_number).order_by("-change_date")
                 return HttpResponse(issue)
                 #return render(request, 'manager/find_issues.html', {'issue': issue, 'current_user_role': current_user_role })
-            return render(request, 'manager/find_issues.html', {'current_user_role': current_user_role })
+            return render(request, 'manager/view_statistic_downtime.html', {'current_user_role': current_user_role })
+        else:
+
+            return redirect('/login/')
+
+def view_statistic_issues(request):
+        user_warn = request.user
+        if user_warn.is_authenticated:
+            current_user = UserProfile.objects.get(user=request.user)
+            issues_user = current_user
+            current_user_role = str(current_user.id_state)
+            if request.is_ajax() == True:
+                find_number = request.GET.get('num')
+                issue = issues.objects.filter(number_issue=find_number).order_by("-change_date")
+                return HttpResponse(issue)
+                #return render(request, 'manager/find_issues.html', {'issue': issue, 'current_user_role': current_user_role })
+            return render(request, 'manager/view_statistic_issues.html', {'current_user_role': current_user_role })
         else:
 
             return redirect('/login/')
