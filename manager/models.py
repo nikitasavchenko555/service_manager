@@ -81,14 +81,8 @@ where i.start_down_date between (timestamp %s)::date and (timestamp %s)::date"""
          from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""select * from issues_report_2 il
-where (il.name like '\%%S\%')
-or (il.model like '%%S%') 
-or (il.number_issue::text like '%%S%') 
-or (il.status like '%%S%') 
-or (il.name_equipment like '%%S%')
-or (il.inventory_number::text like '%%S%')
-or (il.coordinator like '%%S%');""", [search])
-         result_report = [row for row in cursor.fetchall()]
+where (il.name=%s)""", [search])
+         result_source = [row for row in cursor.fetchall()]
 
          def __str__(self):
 

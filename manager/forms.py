@@ -53,7 +53,7 @@ class ReportForm(forms.Form):
        end_period = forms.DateField(widget=widgets.AdminDateWidget())
 
 class Search_for_Number(forms.Form):
-       number = forms.IntegerField()
+       number = forms.CharField()
        
          
 

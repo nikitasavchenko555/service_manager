@@ -405,9 +405,35 @@ def find_issues(request):
             current_user_role = str(current_user.id_state)
             if request.is_ajax() == True:
                 find_number = int(request.GET.get('num'))
-                issue = equipment.objects.get_number(find_number)
-                return HttpResponse(issue)
+                issue = str(equipment.objects.get_number(find_number))
+                issue_result = str(re.sub("(['|'])", '', issue))
+                return HttpResponse(issue_result)
             return render(request, 'manager/find_issues.html', {'form': form, 'current_user_role': current_user_role })
+        else:
+
+            return redirect('/login/')
+
+def find_content(request):
+        user_warn = request.user
+        if user_warn.is_authenticated:
+            form = Search_for_Number()
+            current_user = UserProfile.objects.get(user=request.user)
+            issues_user = current_user
+            current_user_role = str(current_user.id_state)
+            if request.is_ajax() == True:
+                find_content = request.GET.get('num')
+                find_content_2 = str(re.sub("'", '', find_content))
+                issue = str(equipment.objects.get_source(find_content))
+                if issue:
+                        if issue != '[]':
+                         
+                             issue_result = str(re.sub("(['|'])", '', issue))
+                             return HttpResponse(issue_result)
+                        else:
+                             return HttpResponse("К сожалению, ничего не найдено")
+                else:
+                      return HttpResponse("К сожалению, База данных недоступна, попробуйте позднее")
+            return render(request, 'manager/find_content.html', {'form': form, 'current_user_role': current_user_role })
         else:
 
             return redirect('/login/')
