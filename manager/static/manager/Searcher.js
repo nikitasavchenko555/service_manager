@@ -2,21 +2,37 @@ $(document).ready(function() {
 $("#sender").click( function(event) {
        
        find_number = document.getElementById('find_number').value;
-       //alert(find_number);
        $.get('/index/find_issues/', { num: find_number}, function(data){
-          //var result;
-          arr = data.split(',')
+          if (data != "")
+          {
+          arr = data.split("''")
           var td;
+          td = '<tr id="succes" class="tr_click">'
           for (var i = 0; i < arr.length; i++) {
-          cell = arr[i].replace(",", "");
-          cell = cell.replace("[(", "");
-          cell = cell.replace(")]", ""); 
-          link = arr[0].replace(",", "");
-          link = link.replace("[(", "");
+          cell = arr[i];
+          cell = cell.replace("'", "");
+          link = arr[0].replace("'", "");
+          if (i != 0) 
+          {
+          if ((i % 6) == 0) {
+          td +=  '</tr><tr id="succes" class="tr_click"><td>' + cell + '</td>';
+          } 
+          else { 
+          td += '<td>' + cell + '</td>'; 
+          }
+          }
+          else { 
           td += '<td>' + cell + '</td>';
+          }
           $('#sucess').html(td);
-          //alert(link);
-        }
+          }
+          }
+          else
+              {
+               alert("К сожалению, ничего не найдено, попробуйте уточнить поиск");
+              }
+          
+          
        $("#sucess").click( function(event){
    		myWin=open('/index/issue/'+link+'/');
         });
@@ -26,21 +42,35 @@ $("#sender").click( function(event) {
 $("#sender_2").click( function(event) {
        
        find_number = document.getElementById('find_number').value;
-       //alert(find_number);
        $.get('/index/find_content/', { num: find_number}, function(data){
-          //var result;
-          arr = data.split(',')
+          if (data != "")
+          {
+          arr = data.split("''")
           var td;
+          td = '<tr id="succes" class="tr_click">'
           for (var i = 0; i < arr.length; i++) {
-          cell = arr[i].replace(",", "");
-          cell = cell.replace("[(", "");
-          cell = cell.replace(")]", ""); 
-          link = arr[0].replace(",", "");
-          link = link.replace("[(", "");
-          td += '<td>' + cell + '</td>';
+          cell = arr[i]
+          cell = cell.replace("'", "");
+          link = arr[0].replace("'", "");
+          if (i != 0) 
+          {
+          if ((i % 6) == 0) {
+          td += '</tr><tr id="succes" class="tr_click"><td>' + cell + '</td>';
+          } 
+          else { td += '<td>' + cell + '</td>'; 
+          }
+          }
+          else { td += '<td>' + cell + '</td>';
+          }
           $('#sucess').html(td);
-          //alert(link);
-        }
+          }
+          }
+          else
+             {
+               alert("К сожалению, ничего не найдено, попробуйте уточнить поиск");
+             }
+          
+          
        $("#sucess").click( function(event){
    		myWin=open('/index/issue/'+link+'/');
         });

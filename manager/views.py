@@ -374,6 +374,7 @@ def view_reports(request):
              report_sheet.cell(row=1, column=13).value = "Инвентарный №"
              report_sheet.cell(row=1, column=14).value = "Координатор"
              i = 1
+
              j = 1
              report = equipment.objects.get_report(start_period_result, end_period_result)
              for rep in range(len(report)):
@@ -405,9 +406,18 @@ def find_issues(request):
             current_user_role = str(current_user.id_state)
             if request.is_ajax() == True:
                 find_number = int(request.GET.get('num'))
-                issue = str(equipment.objects.get_number(find_number))
-                issue_result = str(re.sub("(['|'])", '', issue))
-                return HttpResponse(issue_result)
+                issue = equipment.objects.get_number(find_number)
+                #issue_result = str(re.sub("(['|'])", '', issue))
+                #if issue != None:
+                issue_list_result = []
+                          #обработка результата для разрешения точек и запятых в полях с описанием
+                for r in range(len(issue)):
+                      for i in issue[r]:
+                          issue_list_result.append("\'"+str(i)+"\'")
+                                        
+                return HttpResponse(issue_list_result)      
+               
+                
             return render(request, 'manager/find_issues.html', {'form': form, 'current_user_role': current_user_role })
         else:
 
@@ -423,16 +433,15 @@ def find_content(request):
             if request.is_ajax() == True:
                 find_content = request.GET.get('num')
                 find_content_2 = str(re.sub("'", '', find_content))
-                issue = str(equipment.objects.get_source(find_content))
-                if issue:
-                        if issue != '[]':
-                         
-                             issue_result = str(re.sub("(['|'])", '', issue))
-                             return HttpResponse(issue_result)
-                        else:
-                             return HttpResponse("К сожалению, ничего не найдено")
-                else:
-                      return HttpResponse("К сожалению, База данных недоступна, попробуйте позднее")
+                issue = equipment.objects.get_source(find_content)
+                issue_list_result = []
+                #обработка результата для разрешения точек и запятых в полях с описанием
+                for r in range(len(issue)):
+                       for i in issue[r]:
+                             issue_list_result.append("\'"+str(i)+"\'")
+                                        
+                return HttpResponse(issue_list_result)
+               
             return render(request, 'manager/find_content.html', {'form': form, 'current_user_role': current_user_role })
         else:
 

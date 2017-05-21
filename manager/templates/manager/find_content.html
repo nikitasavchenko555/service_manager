@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <html>
 <head>
-<title>Поиск инцидентов</title>
+<title>Поиск по содержимому</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <link rel="stylesheet" href="{% static 'css/time.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -60,9 +60,7 @@
 				<th>Координатор</th>
 			</tr>
 		</thead>
-		<tbody  class="tr_body">
-		<tr id="sucess" class="tr_click" ></tr>
-                <!--onclick="openWin('/index/issue/')"-->
+		<tbody id="sucess" class="tr_body">
 		<tbody>
         <!--</form>-->
 {% block footer_js %}
