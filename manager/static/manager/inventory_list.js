@@ -6,7 +6,7 @@ $("#model").click( function(event) {
         var mod;
         arr = message.split(',,')
         //alert(arr)
-        var options = '<option value="">---------- </option>';
+        var options = '<option value=""></option>';
        for (var i = 0; i < arr.length; i++) {
           mod = arr[i].replace(",", "");
           options += '<option>' + mod + '</option>';

@@ -7,7 +7,7 @@ $("#my_work").click( function(event) {
         //alert(message)
         arr = message.split(',,')
         //alert(arr)
-        var options = '<option value="">---------- </option>';
+        var options = '<option value=""></option>';
        for (var i = 0; i < arr.length; i++) {
           space = arr[i].replace(",", "");
           //alert(space)

@@ -40,19 +40,19 @@ def get_type(request):
 
         type_id = request.POST.get('cat_id')
 
-        if type_id != "":
+        if type_id != None:
 
-             type_list.append(type_id)
+             type_list.insert(0, type_id)
              
              t = type_list[0]
              
-             type_list.clear()
+             #type_list.clear()
              
              return t
 
         else:
-             t = ""
-             #t = type_list[0]
+             
+             t = type_list[0]
              type_list.clear()
              return t
 
@@ -61,32 +61,32 @@ def get_model(request):
 
         mod_id = request.POST.get('model')
 
-        if mod_id != "":
+        if mod_id != None:
 
-             mod_list.append(mod_id)
+             mod_list.insert(0, mod_id)
              
              m = mod_list[0]
              
-             mod_list.clear()
+             #mod_list.clear()
              
              return m
 
         else:
 
-             m = ""
+             m = mod_list[0]
              mod_list.clear()
              return m
 #функция для получения переменной с инвентарным номером оборудования из ajax post-запроса
 def get_inventory(request):
         inv = request.POST.get('num')
 
-        if inv != "": 
-            inv_list.append(inv)
+        if inv != None: 
+            inv_list.insert(0, inv)
             i = inv_list[0]
-            inv_list.clear()
+            #inv_list.clear()
             return i
         else:
-            i = ""
+            i = inv_list[0]
             inv_list.clear()
             return i
 
@@ -95,10 +95,9 @@ def get_inventory(request):
 #view создания инцидента            
 def create_issue(request):
     user_warn = request.user
-
     if user_warn.is_authenticated:
-
-        current_user_role = UserProfile.objects.get(user=user_warn)
+        current_user = UserProfile.objects.get(user=user_warn)
+        current_user_role = str(current_user.id_state)   
         new_issues = issues()
         number = issues.objects.values('number_issue').order_by().last()
         num_view = number['number_issue']+1
@@ -136,12 +135,11 @@ def create_issue(request):
                  type_id = get_type(request)
                  mod_id = get_model(request)
                  inv_num_id = get_inventory(request)
-                 if type_id != "" or mod_id != "" or inv_num_id != "":
-                     result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
+                 if type_id == "" or mod_id == "" or inv_num_id == "":
+                     result = "Выбор не сохранен.Выберите все необходимые поля"
                  else:
-                     result = "Выбор не сохранен.Выберите все необходимые поля №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
-                 #строка для диагностики
-                 #result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
+                     result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
+                     
                  return HttpResponse(result)
              name = get_type(request)
              model = get_model(request)
@@ -157,6 +155,7 @@ def create_issue(request):
                      new_issues.change_date = timezone.now()
                      new_issues.save()
                      return redirect('/index/')
+                     #return HttpResponse(new_issues.equipment_model_id)
              else:
                      return  HttpResponse("Форма невалидна")
         return render(request, 'manager/create_issue.html', {'form': form, 'num_view': num_view, 'current_user_role': current_user_role } )
