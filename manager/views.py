@@ -177,7 +177,27 @@ def view_issue(request, number):
              
             issue = get_object_or_404(issues, number_issue=number)
 
-            return render(request, 'manager/issue.html', {'issue': issue, 'current_user_role': current_user_role })
+            model  = str(equipment.objects.values('model').filter(pk=issue.equipment_model_id))
+
+            inventory = str(equipment.objects.values('inventory_number').filter(pk=issue.equipment_model_id))
+           
+            model = re.sub(r'QuerySet', ' ' , model)
+
+            model = re.sub(r'model', ' ' , model)
+
+            model = str(re.findall(r'([А-Я]+|[A-Z]+|[0-9]+)', model))
+
+            model = re.sub("(\['|\'])", ' ', model) 
+
+            inventory = re.sub(r'QuerySet', ' ' , inventory)
+
+            inventory = re.sub(r'inventory_number', ' ' , inventory)
+
+            inventory = str(re.findall(r'([0-9]+)', inventory))
+
+            inventory = re.sub("(\['|\'])", ' ', inventory)       
+
+            return render(request, 'manager/issue.html', {'issue': issue, 'model': model, 'inventory': inventory,  'current_user_role': current_user_role })
 
         else:
 
@@ -486,6 +506,7 @@ def view_statistic_issues(request):
                 stat_issue = equipment.objects.get_stat_level_issue(start_period_result, end_period_result)     
                 dist_stat = dict(stat_issue)
                 dist_stat_result = json.dumps(dist_stat)
+                test = "jgjgjg"
                 return HttpResponse(dist_stat_result)
                
             return render(request, 'manager/view_statistic_issues.html', {'form': form, 'current_user_role': current_user_role })

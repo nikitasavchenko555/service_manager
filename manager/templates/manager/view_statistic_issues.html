@@ -56,6 +56,9 @@
         <table border=1px width=100%>
 		<thead>
                 <tr class="tr_head">
+			<td colspan="6" class="tr_main">Статистика по уровням</td>
+			</tr>
+                <tr class="tr_head">
                 <th>Аварий уровня А5</th>
                 <th>Аварий уровня А4</th>
                 <th>Аварий уровня А3</th>
@@ -65,7 +68,24 @@
 		</thead>
 		<tbody id="succes_stat" class="tr_body">
 		<tbody>
-        
+                </table>
+                <br>
+         <table border=1px width=100%>
+		<thead>
+                <tr class="tr_head">
+			<td colspan="6" class="tr_main">Статистика по статусам</td>
+			</tr>
+                <tr class="tr_head">
+                <th>Назначена</th>
+                <th>В работе</th>
+                <th>Завершена</th>
+                <th>Завершена.Авария не подтверждена</th>
+                <th>Закрыта</th>
+                </tr>
+		</thead>
+		<tbody id="succes_stat" class="tr_body">
+		<tbody>
+         </table>
 {% block footer_js %}
 <script>
     var django = django || {};

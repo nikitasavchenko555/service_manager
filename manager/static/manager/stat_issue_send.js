@@ -36,6 +36,7 @@ function Sender_Stat() {
 	},
         function(data)
 	{
+           alert(data);
            var stat_issue = JSON.parse(data);
            if (stat_issue[1] === undefined)
            {

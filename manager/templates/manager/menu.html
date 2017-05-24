@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {% block menu %}
-<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
+<a href="{% url 'index' %}" ><div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div></a>
 	<h1>Система управления инцидентами</h1>
 	<br></br>
         {% block content %}
