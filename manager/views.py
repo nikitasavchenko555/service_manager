@@ -2,17 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import *
 from datetime import datetime, date, time
 from django.http import Http404
-from .forms import IssuesForm, IssuesEditForm, ReportForm, Search_for_Number
+from .forms import IssuesForm, IssuesEditForm, ReportForm, Search_for_Number, StatisticForm
 from django.views.i18n import *
 from django.contrib.auth.models import User
 from login.models import *
 from django.http import HttpResponse
 from django.core import serializers
 from django.conf import settings
-from django.core.files import File
+from django.http import JsonResponse
+import json
 import re
-import xlwt
-import xlrd
 import openpyxl
 import os
 
@@ -102,7 +101,7 @@ def create_issue(request):
         number = issues.objects.values('number_issue').order_by().last()
         num_view = number['number_issue']+1
         form = IssuesForm()
-        #заполняем поля для выбора об-я через ajax
+        #заполняем поля для выбора оборудования через ajax-запрос
         if request.is_ajax() == True:
              if request.method == "GET":
                 space = request.GET.get('space')
@@ -132,6 +131,7 @@ def create_issue(request):
         if request.method == "POST":
              form = IssuesForm(request.POST)
              if request.is_ajax() == True:
+                 #отправляем значения в списки
                  type_id = get_type(request)
                  mod_id = get_model(request)
                  inv_num_id = get_inventory(request)
@@ -141,6 +141,7 @@ def create_issue(request):
                      result = "Выбор сохранен успешно №%s, тип %s, модель %s" % (inv_num_id, type_id, mod_id)
                      
                  return HttpResponse(result)
+             #забираем значения из списков
              name = get_type(request)
              model = get_model(request)
              inventory = get_inventory(request)
@@ -452,12 +453,13 @@ def view_statistic_downtime(request):
             current_user = UserProfile.objects.get(user=request.user)
             issues_user = current_user
             current_user_role = str(current_user.id_state)
+            form = StatisticForm()
             if request.is_ajax() == True:
                 find_number = request.GET.get('num')
                 issue = issues.objects.filter(number_issue=find_number).order_by("-change_date")
                 return HttpResponse(issue)
-                #return render(request, 'manager/find_issues.html', {'issue': issue, 'current_user_role': current_user_role })
-            return render(request, 'manager/view_statistic_downtime.html', {'current_user_role': current_user_role })
+                
+            return render(request, 'manager/view_statistic_downtime.html', {'form': form, 'current_user_role': current_user_role })
         else:
 
             return redirect('/login/')
@@ -468,12 +470,25 @@ def view_statistic_issues(request):
             current_user = UserProfile.objects.get(user=request.user)
             issues_user = current_user
             current_user_role = str(current_user.id_state)
+            form = StatisticForm()
             if request.is_ajax() == True:
-                find_number = request.GET.get('num')
-                issue = issues.objects.filter(number_issue=find_number).order_by("-change_date")
-                return HttpResponse(issue)
-                #return render(request, 'manager/find_issues.html', {'issue': issue, 'current_user_role': current_user_role })
-            return render(request, 'manager/view_statistic_issues.html', {'current_user_role': current_user_role })
+                form_send = request.POST.get('data')
+                start_period = re.findall(r'(start_period=[0-9.]+)', form_send)
+                start_period = str(start_period)
+                start_period_result_1 = str(re.findall(r'([0-9.]+)', start_period))
+                start_period_result_2 = str(re.sub("(\['|\'])", '', start_period_result_1))
+                end_period = re.findall(r'(end_period=[0-9.]+)', form_send)
+                end_period = str(end_period)
+                end_period_result_1 = str(re.findall(r'([0-9.]+)', end_period))
+                end_period_result_2 = str(re.sub("(\['|\'])", '', end_period_result_1))
+                start_period_result = datetime.strptime(str(start_period_result_2), "%d.%m.%Y")
+                end_period_result = datetime.strptime(str(end_period_result_2), "%d.%m.%Y")
+                stat_issue = equipment.objects.get_stat_level_issue(start_period_result, end_period_result)     
+                dist_stat = dict(stat_issue)
+                dist_stat_result = json.dumps(dist_stat)
+                return HttpResponse(dist_stat_result)
+               
+            return render(request, 'manager/view_statistic_issues.html', {'form': form, 'current_user_role': current_user_role })
         else:
 
             return redirect('/login/')

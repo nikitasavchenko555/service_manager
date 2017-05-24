@@ -18,13 +18,14 @@
 <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
 <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
 <script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+<script type="text/javascript" src="/static/manager/stat_issue_send.js"></script>
 </head>
 <body>
 {% block menu %}
 {% include 'manager/menu.html' %}
-{% endblock %}
-<!--<form  method="POST" id="form_send"> <!--action="javascript:void(null);" onsubmit="Searcher()">-->
-			
+{% endblock %}			
+ <form  method="POST" id="form_send_stat" action="javascript:void(null);" onsubmit="Sender_Stat()">
+		{% csrf_token %}	
         <table border=1px width=100%>
 	<thead>
 			<tr class="tr_head">
@@ -32,15 +33,39 @@
 			</tr>
 		</thead>
 		<tbody class="tr_body">
+                <tr>
+		<td class="tr_main"><label>Выберите начало периода</label></td>
+		<td id="start" class="form-group">{{ form.start_period }}
+		</td>
+		</tr>
+                <tr>
+		<td class="tr_main"><label>Выберите конец периода</label></td>
+		<td id="end">{{ form.end_period }}
+		</td>
+		</tr>
+                <tr id="succes_report">
+                </tr>
+                <tr class="tr_main">
+			<td  colspan="2">
+			<input id="sender" border="2px"  type="submit"  value="Выбрать"/>
+			</td>
+			</tr>
 		</tbody>
         </table>
         <br>
         <table border=1px width=100%>
 		<thead>
+                <tr class="tr_head">
+                <th>Аварий уровня А5</th>
+                <th>Аварий уровня А4</th>
+                <th>Аварий уровня А3</th>
+                <th>Аварий уровня А2</th>
+                <th>Аварий уровня А1</th>
+                </tr>
 		</thead>
-		<tbody class="tr_body">
+		<tbody id="succes_stat" class="tr_body">
 		<tbody>
-        <!--</form>-->
+        
 {% block footer_js %}
 <script>
     var django = django || {};
@@ -48,6 +73,5 @@
 </script>
 {{ form.media }}
 {% endblock %}
-<script src="{% static 'manager/link.js' %}"></script>
 </body>
 </html>

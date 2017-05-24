@@ -33,13 +33,20 @@
 		</thead>
 		<tbody class="tr_body">
                 <tr>
-		<td class="tr_main"><label>Введите номер инцидента</label></td>
-		<td  class="form-group"><input type="text" id="find_number"></input>
+		<td class="tr_main"><label>Выберите начало периода</label></td>
+		<td id="start" class="form-group">{{ form.start_period }}
 		</td>
 		</tr>
+                <tr>
+		<td class="tr_main"><label>Выберите конец периода</label></td>
+		<td id="end">{{ form.end_period }}
+		</td>
+		</tr>
+                <tr id="succes_report">
+                </tr>
                 <tr class="tr_main">
 			<td  colspan="2">
-			<input id="sender" border="2px"  type="button"  value="Найти"/>
+			<input id="sender" border="2px"  type="submit"  value="Создать"/>
 			</td>
 			</tr>
 		</tbody>

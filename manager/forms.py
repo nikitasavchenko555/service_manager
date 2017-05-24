@@ -54,6 +54,11 @@ class ReportForm(forms.Form):
 
 class Search_for_Number(forms.Form):
        number = forms.CharField()
+
+
+class StatisticForm(forms.Form):
+       start_period = forms.CharField(widget=widgets.AdminDateWidget())
+       end_period = forms.CharField(widget=widgets.AdminDateWidget())
        
          
 

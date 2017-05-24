@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm, inlineformset_factory
 from django.utils.safestring import mark_safe
 from login.models import *
+from django.db import connection
 
 def uknown_user():
     id = 777
@@ -13,7 +14,7 @@ def uknown_user():
 
 class equipment_manager(models.Manager):
      def get_name(self, workspace):
-         from django.db import connection
+         #from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""
             SELECT DISTINCT e.name
@@ -28,7 +29,7 @@ class equipment_manager(models.Manager):
          return result_list
 
      def get_model(self, message):
-         from django.db import connection
+         #from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""
             SELECT e.model
@@ -40,7 +41,7 @@ class equipment_manager(models.Manager):
          return model_list
 
      def get_inventory(self, model):
-         from django.db import connection
+         #from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""
             SELECT e.inventory_number
@@ -51,7 +52,7 @@ class equipment_manager(models.Manager):
          return inventory_list
      
      def check_inventory(self, inv):
-         from django.db import connection
+         #from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""
             SELECT e.inventory_number
@@ -65,7 +66,7 @@ class equipment_manager(models.Manager):
 #class IssueManager(models.Manager):
 
      def get_report(self, start_period_result, end_period_result):
-         from django.db import connection
+         #from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""select * from issues_report_2 i
 where i.start_down_date between (timestamp %s)::date and (timestamp %s)::date""", [start_period_result, end_period_result])
@@ -78,7 +79,7 @@ where i.start_down_date between (timestamp %s)::date and (timestamp %s)::date"""
          return result_report
 
      def get_source(self, search):
-         from django.db import connection
+         #from django.db import connection
          cursor = connection.cursor()
          search_right = '%'+search+'%' 
          cursor.execute("""select il.number_issue, il.level_issue_id, il.status, mi.brief_description, au.username as creator, il.coordinator
@@ -97,7 +98,6 @@ and ((il.name like %s) or (il.number_issue::text like %s) or (il.model like %s) 
 
 
      def get_number(self, number):
-         from django.db import connection
          cursor = connection.cursor()
          cursor.execute("""select il.number_issue, il.level_issue_id, il.status, mi.brief_description, au.username as creator, il.coordinator
 from issues_report_2 il, manager_issues mi, auth_user au, login_userprofile lu
@@ -112,7 +112,14 @@ and il.number_issue =%s;""", [number])
               return self.name 
         
          return result_number
-         
+
+     def get_stat_level_issue(self, start_period, end_period):
+         cursor = connection.cursor()
+         cursor.execute("""select mli.level, count(mi.*) from manager_issues mi, manager_level_issue mli
+where mi.level_issue_id  = mli.id and mi.start_down_date between (timestamp %s)::date and (timestamp %s)::date group by mli.level""", [start_period, end_period])
+         result_stat = [row for row in cursor.fetchall()]
+        
+         return result_stat
 
 
 class groups_of_reason(models.Model): #группы причин
