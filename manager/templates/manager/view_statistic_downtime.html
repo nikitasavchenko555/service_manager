@@ -18,13 +18,16 @@
 <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
 <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
 <script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+<script type="text/javascript" src="/static/manager/stat_downtime_send.js"></script>
+<script type="text/javascript" src="/static/manager/stat_downtime_form.js"></script>
 </head>
 <body>
 {% block menu %}
 {% include 'manager/menu.html' %}
 {% endblock %}
-<!--<form  method="POST" id="form_send"> <!--action="javascript:void(null);" onsubmit="Searcher()">-->
-			
+
+<form  method="POST" id="form_send_stat_d" action="javascript:void(null);" onsubmit="Sender_Stat_Downtime()">
+	{% csrf_token %}		
         <table border=1px width=100%>
 	<thead>
 			<tr class="tr_head">
@@ -44,9 +47,29 @@
 		</tr>
                 <tr id="succes_report">
                 </tr>
+                <tr>
+				<td class="tr_main"><label>Подразделение</label></td>
+				<td id="my_work">
+				{{ form.workspace }}
+				</td>
+			</tr>
+			<tr>
+				<td class="tr_main"><label>Тип оборудования</label></td>
+				<td><select id="type_inventory"></select>
+			        </td>
+			</tr>
+			<tr>
+				<td class="tr_main"><label>Модель</label></td>
+                                <td><select id="model"></select></td>
+			</tr>
+			<tr>
+				<td class="tr_main"><label>Инвентарный №</label></td>
+ 				<td><select id="inventory"></select><p id="succes_equipment"></p></td>
+	        </tr>
+                
                 <tr class="tr_main">
 			<td  colspan="2">
-			<input id="sender" border="2px"  type="submit"  value="Создать"/>
+			<input id="sender" border="2px"  type="submit"  value="Отправить"/>
 			</td>
 			</tr>
 		</tbody>
@@ -58,27 +81,16 @@
 			<td colspan="6" class="tr_main">Результат поиска</td>
 			</tr>
 			<tr class="tr_head">
-				<th>№ инцидента</th>
-				<th>Уровень</th>
-				<th>Статус</th>
-				<th>Краткое описание</th>
-				<th>Инициатор</th>
-				<th>Координатор</th>
+				<th>Цех</th>
+				<th>Модель</th>
+				<th>Инвентарный №</th>
+                                <th>Общее время простоя</th>
 			</tr>
 		</thead>
-		<tbody class="tr_body">
-			{% for issue in issues %}
-			<tr  id="sucess" class="tr_click" onclick="openWin('{% url 'view_issue' number=issue.number_issue %}')">
-				<td ></td>
-				<td>{{ issue.level_issue }}</td>
-				<td>{{ issue.current_status }}</td>
-				<td>{{ issue.brief_description }}</td>
-				<td>{{ issue.creator }}</td>
-				<td>{{ issue.coordinator }}</td>
-			</tr>
-			{% endfor %}
+		<tbody id="succes_stat_down" class="tr_body">
+			
 		<tbody>
-        <!--</form>-->
+</form>
 {% block footer_js %}
 <script>
     var django = django || {};

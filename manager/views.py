@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import *
 from datetime import datetime, date, time
 from django.http import Http404
-from .forms import IssuesForm, IssuesEditForm, ReportForm, Search_for_Number, StatisticForm
+from .forms import IssuesForm, IssuesEditForm, ReportForm, Search_for_Number, StatisticForm, StatisticDownForm
 from django.views.i18n import *
 from django.contrib.auth.models import User
 from login.models import *
@@ -156,7 +156,7 @@ def create_issue(request):
                      new_issues.change_date = timezone.now()
                      new_issues.save()
                      return redirect('/index/')
-                     #return HttpResponse(new_issues.equipment_model_id)
+                 
              else:
                      return  HttpResponse("Форма невалидна")
         return render(request, 'manager/create_issue.html', {'form': form, 'num_view': num_view, 'current_user_role': current_user_role } )
@@ -164,7 +164,7 @@ def create_issue(request):
         return redirect('/login/')
     
 
-
+#представление просмотра информации по инциденту
 def view_issue(request, number):
 
         user_warn = request.user
@@ -204,7 +204,7 @@ def view_issue(request, number):
             return redirect('/login/')
     
         
-
+#представление дл редактирования инцидента
 def issue_edit(request, number):
 
     user_warn = request.user
@@ -244,7 +244,6 @@ def issue_edit(request, number):
             form = IssuesEditForm(request.POST)
             if request.is_ajax() == True:
                          issue1 = get_object_or_404(issues, number_issue=number)
-                         #number_check = number_history-1
                          if issue1.number_history == (number_history-1): 
                              result_save_succes = "Изменения сохранены "
                              return  HttpResponse(result_save_succes)
@@ -473,10 +472,33 @@ def view_statistic_downtime(request):
             current_user = UserProfile.objects.get(user=request.user)
             issues_user = current_user
             current_user_role = str(current_user.id_state)
-            form = StatisticForm()
+            form = StatisticDownForm()
             if request.is_ajax() == True:
+                if request.method == "GET":
+                    space = request.GET.get('space')
+                    if space != None:
+                       space_id = workspace.objects.get(name=space)
+                       type_inventory = str(equipment.objects.get_name(space_id.id))
+                       dist_work = re.findall(r'[\d\w\s,-]+', type_inventory)
+                       return HttpResponse(dist_work)
+                    cat_id = request.GET.get('name')
+                    if cat_id != None:
+                       model = str(equipment.objects.get_model(cat_id))
+                       dist = re.findall(r'[\d\w,]+', model)
+                       return HttpResponse(dist)
+                    mod = request.GET.get('model')
+                    if mod != None:
+                       inventory = str(equipment.objects.get_inventory(mod))
+                       dist_inventory = re.findall(r'[\d\w,]+', inventory)
+                       return HttpResponse(dist_inventory)
+                    inv_num = request.GET.get('send')
+                    if inv_num != None:
+                       sender= str(equipment.objects.check_inventory(inv_num))
+                       send_dist = re.findall(r'[\d\w,]+', sender)
+                       result = "Оборудование успешно выбрано, нажмите кнопку ""Отправить"" для получения результата"
+                       return HttpResponse(result)
                 find_number = request.GET.get('num')
-                issue = issues.objects.filter(number_issue=find_number).order_by("-change_date")
+                issue = equipment.objects.get_stat_downtime(number_issue=find_number)
                 return HttpResponse(issue)
                 
             return render(request, 'manager/view_statistic_downtime.html', {'form': form, 'current_user_role': current_user_role })
@@ -506,7 +528,6 @@ def view_statistic_issues(request):
                 stat_issue = equipment.objects.get_stat_level_issue(start_period_result, end_period_result)     
                 dist_stat = dict(stat_issue)
                 dist_stat_result = json.dumps(dist_stat)
-                test = "jgjgjg"
                 return HttpResponse(dist_stat_result)
                
             return render(request, 'manager/view_statistic_issues.html', {'form': form, 'current_user_role': current_user_role })

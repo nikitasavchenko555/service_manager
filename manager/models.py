@@ -62,9 +62,6 @@ class equipment_manager(models.Manager):
         
          return check_list
 
-
-#class IssueManager(models.Manager):
-
      def get_report(self, start_period_result, end_period_result):
          #from django.db import connection
          cursor = connection.cursor()
@@ -120,6 +117,23 @@ where mi.level_issue_id  = mli.id and mi.start_down_date between (timestamp %s):
          result_stat = [row for row in cursor.fetchall()]
         
          return result_stat
+
+
+     def get_stat_downtime(self, start_period, end_period, workspace_id, model, inventory_number):
+         cursor = connection.cursor()
+         cursor.execute("""select w.name, e.model, e.inventory_number , mi.* from manager_issues mi, manager_equipment e, manager_workspace w
+where mi.equipment_model_id  = e.id
+and e.workspace_id = w.id
+and mi.start_down_date between (timestamp %s)::date and (timestamp %s)::date
+and w.id = %s
+and e.model = %s
+and e.inventory_number = %s""", [start_period, end_period, workspace_id, model, inventory_number])
+         result_stat = [row for row in cursor.fetchall()]
+        
+         return result_stat
+
+
+     
 
 
 class groups_of_reason(models.Model): #группы причин

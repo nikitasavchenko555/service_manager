@@ -56,11 +56,17 @@ class Search_for_Number(forms.Form):
        number = forms.CharField()
 
 
+
 class StatisticForm(forms.Form):
        start_period = forms.CharField(widget=widgets.AdminDateWidget())
        end_period = forms.CharField(widget=widgets.AdminDateWidget())
-       
-         
+
+class StatisticDownForm(ModelForm):
+       start_period = forms.CharField(widget=widgets.AdminDateWidget())
+       end_period = forms.CharField(widget=widgets.AdminDateWidget())
+       class Meta:
+         model = issues
+         fields = ['workspace']
 
 
 
