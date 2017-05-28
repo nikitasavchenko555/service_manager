@@ -73,17 +73,20 @@
          <table border=1px width=100%>
 		<thead>
                 <tr class="tr_head">
-			<td colspan="6" class="tr_main">Статистика по статусам</td>
+			<td colspan="8" class="tr_main">Статистика по статусам</td>
 			</tr>
                 <tr class="tr_head">
                 <th>Назначена</th>
                 <th>В работе</th>
+                <th>Ожидается разрешение</th>
+                <th>Ожидается поставка</th>
                 <th>Завершена</th>
-                <th>Завершена.Авария не подтверждена</th>
+                <th>Не подтверждена</th>
+                <th>Временное решение</th>
                 <th>Закрыта</th>
                 </tr>
 		</thead>
-		<tbody id="succes_stat" class="tr_body">
+		<tbody id="succes_status" class="tr_body">
 		<tbody>
          </table>
 {% block footer_js %}

@@ -118,6 +118,14 @@ where mi.level_issue_id  = mli.id and mi.start_down_date between (timestamp %s):
         
          return result_stat
 
+     def get_stat_status_issue(self, start_period, end_period):
+         cursor = connection.cursor()
+         cursor.execute("""select msi.status, count(mi.*) from manager_issues mi, manager_status_issue msi
+where mi.current_status_id  = msi.id and mi.start_down_date between (timestamp '01.03.2017')::date and (timestamp '25.05.2017')::date group by msi.status""", [start_period, end_period])
+         
+         result_status = [row for row in cursor.fetchall()]
+        
+         return result_status
 
      def get_stat_downtime(self, start_period, end_period, workspace_id, model, inventory_number):
          cursor = connection.cursor()

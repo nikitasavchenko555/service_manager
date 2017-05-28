@@ -525,8 +525,9 @@ def view_statistic_issues(request):
                 end_period_result_2 = str(re.sub("(\['|\'])", '', end_period_result_1))
                 start_period_result = datetime.strptime(str(start_period_result_2), "%d.%m.%Y")
                 end_period_result = datetime.strptime(str(end_period_result_2), "%d.%m.%Y")
-                stat_issue = equipment.objects.get_stat_level_issue(start_period_result, end_period_result)     
-                dist_stat = dict(stat_issue)
+                stat_issue = equipment.objects.get_stat_level_issue(start_period_result, end_period_result)
+                stat_status = equipment.objects.get_stat_status_issue(start_period_result, end_period_result)
+                dist_stat = dict(stat_issue+stat_status)
                 dist_stat_result = json.dumps(dist_stat)
                 return HttpResponse(dist_stat_result)
                
