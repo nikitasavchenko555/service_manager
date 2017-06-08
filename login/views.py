@@ -1,28 +1,30 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import LoginForm
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
-
+import re
 def log_in(request):
+    form = LoginForm()
     if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            u = form.cleaned_data['username']
-            p = form.cleaned_data['password']
-            user = authenticate(username = u, password = p)
-            if user.is_authenticated:
-                if user:
-                    if user.is_active:
-                         login(request, user)
-                         return HttpResponseRedirect('/index')
-            else:
-                     print("Пользователя не существует")
-        else:
-                 print("Имя или пароль неверны")
-    else:
-        form = LoginForm()
+        if request.is_ajax() == True:
+           form_send_login = request.POST.get('data')
+           usern = re.findall(r'(username=[0-9A-Za-z]+)', form_send_login)
+           usern = re.sub("username=", '', str(usern))
+           usern = re.sub("(\['|\'])", '', str(usern))
+           passw = re.findall(r'(password=[0-9A-Za-z]+)', form_send_login)
+           passw = re.sub("password=", '', str(passw))
+           passw = re.sub("(\['|'\])", '', str(passw))
+           #return HttpResponse(passw)
+           user = authenticate(username=usern, password=passw)
+           if user and user.is_authenticated:
+                   if user.is_active:
+                       login(request,user)
+                       return HttpResponse('Успешно')
+           else:
+                return HttpResponse('Логин или пароль неверны!')
+        
     return render(request, 'login/login.html', {'form': form})
 
 @login_required

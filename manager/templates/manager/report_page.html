@@ -16,8 +16,7 @@
 <script type="text/javascript" src="/static/admin/js/urlify.js"></script>
 <script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
 <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
-<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
-<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+<!--<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>-->
 <script type="text/javascript" src="/static/manager/report_form.js"></script>
 </head>
 	<body>
@@ -43,15 +42,6 @@
 		<td id="end">{{ form.end_period }}
 		</td>
 		</tr>
-		<!--<tr>
-		<td class="tr_main"><label>Выберите формат отчёта</label></td>
-                <td><select id="format">
-                <option>Документ PDF</option>
-                <option>Таблица XLS</option>
-                <option>Документ DOC</option>
-                </select>
-		</td>
-		</tr>-->
                 <tr id="succes_report">
                 </tr>
                 <tr class="tr_main">
@@ -62,13 +52,7 @@
 		</tbody>
         </table>
         </form>
-{% block footer_js %}
-<script>
-    var django = django || {};
-    django.jQuery = $;
-</script>
 {{ form.media }}
-{% endblock %}
 <script src="{% static 'manager/link.js' %}"></script>
 </body>
 </html>

@@ -188,6 +188,8 @@ def view_issue(request, number):
             model = str(re.findall(r'([А-Я]+|[A-Z]+|[0-9]+)', model))
 
             model = re.sub("(\['|\'])", ' ', model) 
+            
+            model = re.sub("', '", '', model)
 
             inventory = re.sub(r'QuerySet', ' ' , inventory)
 
@@ -234,6 +236,7 @@ def issue_edit(request, number):
          dist_model = re.sub(r'QuerySet', ' ' , model_result)
          dist_model_result = str(re.findall(r'([А-Я]+|[A-Z]+|[0-9]+)', dist_model))
          dist_model_result = re.sub("(\['|\'])", ' ', dist_model_result)
+         dist_model_result = re.sub("', '", '', dist_model_result)
     #получаем №
          inv_num = str(model.values_list('inventory_number'))
          dist_num = re.sub(r'QuerySet', ' ' , inv_num)
@@ -242,14 +245,7 @@ def issue_edit(request, number):
          form = IssuesEditForm(instance=issue)
          if request.method == "POST":
             form = IssuesEditForm(request.POST)
-            if request.is_ajax() == True:
-                         issue1 = get_object_or_404(issues, number_issue=number)
-                         if issue1.number_history == (number_history-1): 
-                             result_save_succes = "Изменения сохранены "
-                             return  HttpResponse(result_save_succes)
-                         else:
-                             result_save_unsucces = "Сохранение не произошло"
-                             return  HttpResponse(result_save_unsucces)
+         
             if form.is_valid():
                issue = form.save(commit=False)
                issue.workspace = workspace
@@ -267,6 +263,14 @@ def issue_edit(request, number):
             else:
                result_save_unsucces = "Форма невалидна"
                return  HttpResponse(result_save_unsucces)
+         if request.is_ajax() == True:
+                         issue1 = get_object_or_404(issues, number_issue=number)
+                         if issue1.number_history == (number_history-1): 
+                             result_save_succes = "Изменения сохранены "
+                             return  HttpResponse(result_save_succes)
+                         else:
+                             result_save_unsucces = "Сохранение не произошло"
+                             return  HttpResponse(result_save_unsucces)
                  
         
          return render(request, 'manager/issue_edit.html', {'form': form, 'issue': issue,  'dist_model': dist_model_result, 'dist_num_result': dist_num_result, 'current_user_role': current_user_role })
@@ -377,7 +381,9 @@ def view_reports(request):
              #блок работы с Excel
              filename = "Отчёт_"+str(start_period_result_2)+"_"+str(end_period_result_2)+".xls"
              report_book = openpyxl.Workbook()
-             report_sheet = report_book.create_sheet("Инциденты")
+             report_sheet = report_book.active
+             report_sheet.title = 'Инциденты'
+             #report_sheet = report_book.create_sheet("Инциденты")
              report_sheet.cell(row=1, column=1).value = "№ инцидента"
              report_sheet.cell(row=1, column=2).value = "Уровень"
              report_sheet.cell(row=1, column=3).value = "Статус"
@@ -484,8 +490,8 @@ def view_statistic_downtime(request):
                     cat_id = request.GET.get('name')
                     if cat_id != None:
                        model = str(equipment.objects.get_model(cat_id))
-                       dist = re.findall(r'[\d\w,]+', model)
-                       return HttpResponse(dist)
+                       dist_model = re.findall(r'[\d\w,]+', model)
+                       return HttpResponse(dist_model)
                     mod = request.GET.get('model')
                     if mod != None:
                        inventory = str(equipment.objects.get_inventory(mod))
@@ -497,9 +503,29 @@ def view_statistic_downtime(request):
                        send_dist = re.findall(r'[\d\w,]+', sender)
                        result = "Оборудование успешно выбрано, нажмите кнопку ""Отправить"" для получения результата"
                        return HttpResponse(result)
-                find_number = request.GET.get('num')
-                issue = equipment.objects.get_stat_downtime(number_issue=find_number)
-                return HttpResponse(issue)
+                form_send = request.POST.get('data')
+                start_period = re.findall(r'(start_period=[0-9.]+)', form_send)
+                start_period = str(start_period)
+                start_period_result_1 = str(re.findall(r'([0-9.]+)', start_period))
+                start_period_result_2 = str(re.sub("(\['|\'])", '', start_period_result_1))
+                end_period = re.findall(r'(end_period=[0-9.]+)', form_send)
+                end_period = str(end_period)
+                end_period_result_1 = str(re.findall(r'([0-9.]+)', end_period))
+                end_period_result_2 = str(re.sub("(\['|\'])", '', end_period_result_1))
+                start_period_result = datetime.strptime(str(start_period_result_2), "%d.%m.%Y")
+                end_period_result = datetime.strptime(str(end_period_result_2), "%d.%m.%Y")
+                work_space = str(re.findall(r'(workspace=[0-9]+)', form_send))
+                work_space = str(re.findall(r'([0-9.]+)', work_space))
+                work_space = str(re.sub("(\['|\'])", '',  work_space))
+                model = request.POST.get('model')
+                inv = request.POST.get('inv')
+                issue = equipment.objects.get_stat_downtime(start_period_result, end_period_result, work_space, model, inv)
+                list_issue = []
+                for i in issue:
+                    for n in i:
+                        n = [str(n)]
+                        list_issue.append(n)
+                return HttpResponse(str(list_issue))
                 
             return render(request, 'manager/view_statistic_downtime.html', {'form': form, 'current_user_role': current_user_role })
         else:

@@ -17,17 +17,13 @@
 <script type="text/javascript" src="/static/admin/js/urlify.js"></script>
 <script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
 <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
-<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
-<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+<!--<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>-->
 <script type="text/javascript" src="/static/manager/issue_edit_save.js"></script>
 </head>
-	<body>
-	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
-	<h1>Система управления инцидентами</h1>
-	<br></br>
-        {% block content %}
-        {% include "manager/log_user.html" %}
-        {% endblock %}
+<body>
+{% block menu %}
+{% include 'manager/menu.html' %}
+{% endblock %}
 	<form  method="POST">
 		{% csrf_token %}	
 	<table border=1px width=100%>
@@ -166,7 +162,7 @@
 			<tr>
 				<td class="tr_main"><label>Дата закрытия инцидента</label></td>
 				<td class="form-group">
-				{{ form.close_down_date }}
+				{{ form.close_issue_date }}
 				</td>
 			</tr>
 			<tr>
@@ -176,8 +172,8 @@
 				</td>
 			</tr>
 			<tr class="tr_main">
-			<td colspan="2" >
-			<input id="save" border="2px" type="submit" onclick="Save_edit_issue()" value="Сохранить"/>
+			<td colspan="2" id="save">
+			<input  border="2px" type="submit" value="Сохранить"/>
 			</td>
 			</tr>
 		</tbody>

@@ -121,7 +121,7 @@ where mi.level_issue_id  = mli.id and mi.start_down_date between (timestamp %s):
      def get_stat_status_issue(self, start_period, end_period):
          cursor = connection.cursor()
          cursor.execute("""select msi.status, count(mi.*) from manager_issues mi, manager_status_issue msi
-where mi.current_status_id  = msi.id and mi.start_down_date between (timestamp '01.03.2017')::date and (timestamp '25.05.2017')::date group by msi.status""", [start_period, end_period])
+where mi.current_status_id  = msi.id and mi.start_down_date between (timestamp %s)::date and (timestamp %s)::date group by msi.status""", [start_period, end_period])
          
          result_status = [row for row in cursor.fetchall()]
         
@@ -129,13 +129,16 @@ where mi.current_status_id  = msi.id and mi.start_down_date between (timestamp '
 
      def get_stat_downtime(self, start_period, end_period, workspace_id, model, inventory_number):
          cursor = connection.cursor()
-         cursor.execute("""select w.name, e.model, e.inventory_number , mi.* from manager_issues mi, manager_equipment e, manager_workspace w
+         cursor.execute("""select mi.number_issue,--w.name, e.model, e.inventory_number, 
+date_trunc('second',((COALESCE(mi.close_down_date::date, now()::date) + COALESCE(mi.close_down_time::time, now()::time)) - (mi.start_down_date + mi.start_down_time::time)))as interval_issue 
+from manager_issues mi, manager_equipment e, manager_workspace w
 where mi.equipment_model_id  = e.id
 and e.workspace_id = w.id
 and mi.start_down_date between (timestamp %s)::date and (timestamp %s)::date
 and w.id = %s
 and e.model = %s
 and e.inventory_number = %s""", [start_period, end_period, workspace_id, model, inventory_number])
+
          result_stat = [row for row in cursor.fetchall()]
         
          return result_stat

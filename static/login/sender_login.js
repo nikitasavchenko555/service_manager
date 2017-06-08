@@ -1,4 +1,4 @@
-function Sender_Stat_Downtime() {
+function Sender_Login() {
          var django = django || {};
          django.jQuery = $;
          function getCookie(name) {
@@ -28,18 +28,17 @@ function Sender_Stat_Downtime() {
         }
     }
     });
-      
-       var form_send = $('#form_send_stat_d').serialize();
-       
-       $.post('/index/view_statistic/',
+       var form_send = $('#form_send').serialize();
+       $.post('/login/',
        {
 	  data: form_send
 	},
         function(data)
 	{
-           alert(data);
-           $('#succes_stat_down').html(data);
+           
+           $('#result_login').html(data);
            
 	}
+
 );
 };

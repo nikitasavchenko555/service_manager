@@ -6,48 +6,9 @@
 <head>
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-	<body>
-	<div id="logo_img"><img src="{% static 'manager/лиса с твитера.jpeg' %}" alt="Лиса" class="logo"></div>
-	<h1>Система управления инцидентами</h1>
-	<br></br>
-	{% block content %}
-        {% include "manager/log_user.html" %}
-        {% endblock %}
-	<ul id="navbar">
-  	<li><a class="menu" href="{% url 'create_issue' %}" target="_blank">Создать инцидент</a></li>
-  	<li><a class="menu" href="#">Список инцидентов</a>
-	<ul>
-        <li><a href="{% url 'view_issues_user' %}" target="_blank">Мои инциденты</a></li>
-        <li><a href="{% url 'view_issues_user_groups' %}" target="_blank">Инциденты моей группы</a></li>
-        <li><a href="#">Инциденты, ожидающие ответа</a></li>
-        </ul>	
-	</li>
-  	<li><a class="menu" href="#">Поиск инцидентов</a>
-	<ul>
-        <li><a href="#">Поиск по номеру</a></li>
-        <li><a href="#">Поиск по содержимому</a></li>
-        </ul>
-	</li>
-  	<li><a class="menu" href="#">Отчёты</a>
-	<ul>
-        <li><a href="#">Отчёт за текущий день</a></li>
-        <li><a href="#">Отчёт за неделю</a></li>
-        <li><a href="#">Отчёт за месяц</a></li>
-	<li><a href="#">Отчёт за дату</a></li>
-        </ul>	
-	</li>
-	<li><a class="menu" href="#">Статистика</a>
-	<ul>
-        <li><a href="#">Простои</a></li>
-        <li><a href="#">Динамика аварий</a></li>
-        </ul>	
-	</li>
-	<li><a class="menu" href="#">Справка</a>	
-	</li>
-	<li><a class="exit"  href="/login/logout/">Выход</a></li>
-	</ul>
-	<br>
-	<br>
+{% block menu %}
+{% include 'manager/menu.html' %}
+{% endblock %}
 	<table border=1px width=100%>
 		<thead>
                         <tr class="tr_head">
