@@ -562,6 +562,27 @@ def view_statistic_issues(request):
 
             return redirect('/login/')
 
+
+def issue_history(request, number):
+
+    user_warn = request.user
+    
+    if user_warn.is_authenticated:
+
+         if request.method == "GET":
+
+             current_user = UserProfile.objects.get(user=user_warn)
+        
+             current_user_role = str(current_user.id_state)
+
+             issue = equipment.objects.history_issues(number)
+        
+             return render(request, 'manager/issue_history.html', {'issues': issue, 'current_user_role': current_user_role })
+           
+    else:
+
+         return redirect('/login/')
+
         
 
 

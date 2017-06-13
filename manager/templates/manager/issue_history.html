@@ -1,0 +1,53 @@
+{% load staticfiles %}
+<html>
+<head>
+<title>История по инциденту</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<head>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+</head>
+	<body>
+        {% block menu %}
+        {% include 'manager/menu.html' %}
+        {% endblock %}
+	<table border=1px width=100%>
+		<thead>
+			<tr class="tr_head">
+			<td colspan="14" class="tr_main">История по инциденту</td>
+			</tr>
+			<tr class="tr_head">
+				<th>Последнее изменение</th>
+                                <th>Номер инцидента</th>
+				<th>Уровень</th>
+				<th>Статус</th>
+                                <th>Рабочая группа</th>
+				<th>Дата начала простоя</th>
+				<th>Время начала простоя</th>
+				<th>Дата начала инцидента</th>
+                                <th>Время начала инцидента</th>
+                                <th>Дата окончания простоя</th>
+                                <th>Время окончания простоя</th>
+                                <th>Дата завершения инцидента</th>
+                                <th>Время завершения инцидента</th>
+                                <th>Координатор</th>
+			</tr>
+		</thead>
+		<tbody class="tr_body">
+			{% for issue in issues %}
+			<tr class="tr_click" id="succes_history">
+                                {% for i in issue %}
+                                <td>{{ i }}
+                                {% endfor %}
+			</tr>
+			{% endfor %}
+		<tbody>
+{% block footer_js %}
+<script>
+    var django = django || {};
+    django.jQuery = $;
+</script>
+{{ form.media }}
+{% endblock %}
+</body>
+</html>

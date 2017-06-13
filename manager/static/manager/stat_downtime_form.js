@@ -43,16 +43,21 @@ function Sender_Stat_Downtime() {
 	},
         function(data)
 	{
-          //alert(data);
+          if (data == '[]')
+	  {
+            alert("К сожалению, ничего не найдено. Пожалуйста, уточните данные");
+          }
+          else
+          {
           arr = data.split("'], ['")
-          //alert(arr);
+          
           td = ''
-          //alert(arr.length);
+          
           for (var i = 0; i < arr.length; i++) {
           cell = arr[i];
           cell = cell.replace("[['", "");
           cell = cell.replace("']]", "");
-          //alert(td);
+          
           if (i != 0) 
           {
           if ((i % 2) == 0) {
@@ -62,6 +67,7 @@ function Sender_Stat_Downtime() {
           }
           }
           else { td += '<tr class="tr_click"><td><a href="/index/issue/' + cell + '/" target="_blank">'+cell+'</a></td>';
+          }
           }
           }
           //alert(td);

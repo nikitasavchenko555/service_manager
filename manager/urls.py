@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^find_issues/', views.find_issues, name='find_issues'),
     url(r'^find_content/', views.find_content, name='find_content'),
     url(r'^view_statistic_downtime/', views.view_statistic_downtime, name='view_statistic_downtime'),
-    url(r'^view_statistic_issues/', views.view_statistic_issues, name='view_statistic_issues'),    
+    url(r'^view_statistic_issues/', views.view_statistic_issues, name='view_statistic_issues'),
+    url(r'^issue_history/(?P<number>[0-9]+)/$', views.issue_history, name='issue_history'),
 ]

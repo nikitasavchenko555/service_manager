@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <head>
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
 </head>
 	<body>
         {% block menu %}
@@ -16,7 +17,7 @@
 		<thead>
 			<tr class="tr_head">
 				<th colspan="2"><a class="back"  href="{% url 'index' %}">На главную</a>Просмотр инцидента № {{ issue.number_issue }}
-<a class="forward"  href="{% url 'issue_edit' number=issue.number_issue %}">Редактировать</a></th>
+<a class="forward_2"  href="{% url 'issue_history' number=issue.number_issue %}" target="_blank">История</a><a class="forward"  href="{% url 'issue_edit' number=issue.number_issue %}" target="_blank">Редактировать</a></th>
 			</tr>
 		<thead>
 		<tbody>

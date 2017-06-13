@@ -143,8 +143,14 @@ and e.inventory_number = %s""", [start_period, end_period, workspace_id, model, 
         
          return result_stat
 
+     def history_issues(self, number_issue):
+         cursor = connection.cursor()
+         cursor.execute(""" SELECT * from issues_hist ih
+where ih.number_issue = %s""", [number_issue])
 
-     
+         result_hist = [row for row in cursor.fetchall()]
+        
+         return result_hist
 
 
 class groups_of_reason(models.Model): #группы причин
@@ -258,11 +264,11 @@ class issues(models.Model):
     number_issue = models.IntegerField(primary_key=True)
     level_issue = models.ForeignKey(level_issue)
     current_status = models.ForeignKey(status_issue)
-    brief_description = models.CharField(max_length=200)
+    brief_description = models.CharField(max_length=300)
     start_down_date = models.DateField()
     start_down_time = models.TimeField()
-    start_issue_date = models.DateField()
-    start_issue_time = models.TimeField()
+    start_issue_date = models.DateField(default = datetime.now)
+    start_issue_time = models.TimeField(default = timezone.now)
     workspace = models.ForeignKey(workspace)
     equipment_name = models.ForeignKey(equipment, verbose_name="Тип", related_name='+')
     equipment_model = models.ForeignKey(equipment, verbose_name="Модель", related_name='+')
@@ -271,7 +277,7 @@ class issues(models.Model):
     groups_of_work = models.ForeignKey(groups_of_work)
     coordinator = models.ForeignKey('login.UserProfile', verbose_name="Координатор", related_name="issue_coordinator")
     executor = models.ForeignKey('login.UserProfile', verbose_name="Исполнитель", related_name="issue_executor")
-    progress = models.CharField(max_length=1000)
+    progress = models.CharField(max_length=5000)
     group_of_reason = models.ForeignKey(groups_of_reason, blank=True)
     solution = models.ForeignKey(solutions, blank=True)
     number_history = models.IntegerField()
@@ -282,10 +288,11 @@ class issues(models.Model):
     close_issue_date = models.DateField(blank=True, null=True)
     close_issue_time = models.TimeField(blank=True, null=True)
     user_edit = models.ForeignKey('auth.User', default=uknown_user)
-    #issue_objects = IssueManager()
     class Meta:
         verbose_name = 'Инцидент'
         verbose_name_plural = 'Инциденты'
+
+
 
 
 class Reports(models.Model):

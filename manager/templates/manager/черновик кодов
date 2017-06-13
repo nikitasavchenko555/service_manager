@@ -1,6 +1,0 @@
---or (il.model like '%%s%') 
---or (il.number_issue::text like '%%s%') 
---or (il.status like '%%s%') 
---or (il.name_equipment like '%%s%')
---or (il.inventory_number::text like '%%s%')
---or (il.coordinator like '%%s%')
