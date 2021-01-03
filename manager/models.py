@@ -303,7 +303,7 @@ class issues(models.Model):
 
 
 class Reports(models.Model):
-    creator = models.ForeignKey('auth.User',on_delete=models.DO_NOTHING)
+    creator = models.ForeignKey('auth.User', on_delete=models.DO_NOTHING)
     report = models.FileField(upload_to="report/")
 
     class Meta:
